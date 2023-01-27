@@ -15,17 +15,10 @@
                                 <InputLabel for="title" value="Title" />
                                 <TextInput v-model="form.title" type="text" class="mt-1 block w-md"
                                     :class="v$.form.title.$error === true ? 'border-gray-300 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50 rounded-md shadow-sm' : ''" />
-                                <span class="text-red-600 small" v-for="error of v$.form.title.$errors"
-                                    :key="error.$uid">
-                                    {{ error.$message }}
-                                </span>
                             </div>
                             <ckeditor :config="config" :editor="editor" v-model="form.content"
                                 :class="v$.form.content.$error === true ? 'border-gray-300 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50 rounded-md shadow-sm' : ''">
                             </ckeditor>
-                            <span class="text-red-600 small" v-for="error of v$.form.content.$errors" :key="error.$uid">
-                                {{ error.$message }}
-                            </span>
                             <PrimaryButton v-if="isLoading === false" type="submit" id="submitBtn"
                                 class="w-full rounded-none justify-center">
                                 Post
@@ -109,6 +102,10 @@ export default {
                         Inertia.post(route("blog.store", { 'title': this.form.title, 'content': this.form.content }));
                     }, 1000)
                 } else {
+                    this.Toast().fire({
+                        icon: 'error',
+                        title: 'All fields are required'
+                    })
                     this.isLoading = false;
                     document.getElementById("submitBtn").disabled = false;
                 }

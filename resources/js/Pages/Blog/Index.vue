@@ -154,29 +154,16 @@ export default {
                 position: 'center',
                 color: '#00000',
                 confirmButtonColor: '#212529',
-                width: 600,
+                width: 1200,
                 background: '#fff',
                 title: 'Blog Detail',
                 html: `
-                <div align='left'>
-                    <table>
-                        <thead>
-                        </thead>
-                        <tbody class='divide-y divide-gray-200'>
-                        <tr>
-                            <td class='font-bold px-6 py-2'>Date/Time</td>
-                            <td>${moment(blog.created_at).format('MMMM Do YYYY, h:mm:ss a')}</td>
-                        </tr>
-                        <tr>
-                            <td class='font-bold px-6 py-2'>Title</td>
-                            <td>${blog.title}</td>
-                        </tr>
-                        <tr>
-                            <td class='font-bold px-6 py-2'>Content</td>
-                            <td>${blog.content}</td>
-                        </tr>
-                        </tbody>
-                        </table>
+                <div align='center'>
+                    <span><small>${moment(blog.created_at).format('MMMM Do YYYY, h:mm:ss a')}</small></span>
+                    <br><br>
+                    <span><strong>${blog.title}</strong></span>
+                    <br><br>
+                    ${blog.content}
                 </div>
                 `
             });
