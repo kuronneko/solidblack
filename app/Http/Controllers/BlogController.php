@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreBlogRequest;
 use App\Models\Blog;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
@@ -43,9 +44,14 @@ class BlogController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreBlogRequest $request)
     {
-        //
+        Blog::create([
+            'user_id' => Auth::user()->id,
+            'title' => $request->title,
+            'content' => $request->content,
+        ]);
+        return redirect()->route('blog.index');
     }
 
     /**
@@ -88,8 +94,9 @@ class BlogController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Blog $blog)
     {
-        //
+        $blog->delete();
+        return redirect()->back();
     }
 }

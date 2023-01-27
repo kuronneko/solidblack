@@ -38,15 +38,16 @@
                                 class='mx-auto max-w-7x1 w-full whitespace-nowrap rounded-lg bg-white divide-y divide-gray-300 overflow-hidden'>
                                 <thead class="bg-gray-800">
                                     <tr class="text-white text-left">
-                                        <th class="font-semibold text-sm uppercase px-6 py-4"> Date/Time </th>
                                         <th class="font-semibold text-sm uppercase px-6 py-4"> Title </th>
-                                        <th class="font-semibold text-sm uppercase px-6 py-4">
-                                            Content </th>
+                                        <th class="font-semibold text-sm uppercase px-6 py-4"> Date/Time </th>
                                         <th class="font-semibold text-sm uppercase px-6 py-4"> Options</th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-gray-200">
                                     <tr v-for="blog in blogs.data" :key="blog.id">
+                                        <td class="px-6 py-4">
+                                            <p class=""> {{ blog.title }} </p>
+                                        </td>
                                         <td class="px-6 py-4">
                                             <div class="flex items-center space-x-3">
                                                 <div>
@@ -55,12 +56,7 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="px-6 py-4">
-                                            <p class=""> {{ blog.title }} </p>
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            <p class=""> {{ blog.content }} </p>
-                                        </td>
+
                                         <td class="px-6 py-4">
                                             <!--                                             <jet-primary-button>
                                                 <Link :href="
