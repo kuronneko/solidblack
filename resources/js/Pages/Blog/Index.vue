@@ -150,7 +150,8 @@ export default {
     },
     methods: {
         showBlog: function (blog) {
-            this.$swal({
+            Inertia.get(route("blog.show", blog));
+/*             this.$swal({
                 position: 'center',
                 color: '#00000',
                 confirmButtonColor: '#212529',
@@ -158,15 +159,15 @@ export default {
                 background: '#fff',
                 title: 'Blog Detail',
                 html: `
-                <div align='center'>
+                <div>
                     <span><small>${moment(blog.created_at).format('MMMM Do YYYY, h:mm:ss a')}</small></span>
                     <br><br>
                     <span><strong>${blog.title}</strong></span>
                     <br><br>
-                    ${blog.content}
+                    <span>${blog.content}</span>
                 </div>
                 `
-            });
+            }); */
         },
         deleteBlog: function (blog) {
             this.$swal({
