@@ -9,6 +9,7 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
 import VueSweetalert2 from 'vue-sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
+import 'ckeditor-tailwind-reset/ckeditor-tailwind-reset.css'
 //importamos Axios
 import VueAxios from 'vue-axios';
 import axios from 'axios';
