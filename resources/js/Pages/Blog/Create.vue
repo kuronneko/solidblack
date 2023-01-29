@@ -62,7 +62,7 @@
 import AppLayout from '@/Layouts/AppLayout.vue';
 import { Link } from "@inertiajs/inertia-vue3";
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import ImageResize from '@ckeditor/ckeditor5-image/src/imageresize';
+//import ImageResize from '@ckeditor/ckeditor5-image/src/imageresize';
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import InputLabel from "@/Components/InputLabel.vue";
@@ -82,7 +82,8 @@ export default {
             },
             isLoading: false,
             isButtonDisabled: true,
-            editor: ClassicEditor.builtinPlugins.concat([ImageResize]),
+            editor: ClassicEditor,
+            //editor: ClassicEditor.builtinPlugins.concat([ImageResize]),
             config: {
                 image: {
                     toolbar: ['imageTextAlternative'],
@@ -98,7 +99,7 @@ export default {
             },
         };
     },
-    mounted() {
+/*       mounted() {
     this.editor.ui.componentFactory.add('insertImage', function(editor) {
       const command = editor.commands.get('insertImage');
       const view = new editor.ui.ButtonView(editor);
@@ -117,7 +118,7 @@ export default {
 
       return view;
     });
-  },
+  }, */
     validations() {
         return {
             form: {
