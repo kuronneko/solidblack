@@ -1,4 +1,5 @@
 <template>
+
     <AppLayout title="Blog - Create">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -13,7 +14,7 @@
                         <form @submit.prevent="submitForm">
                             <div class="mb-2">
                                 <InputLabel for="title" value="Title" />
-                                <TextInput v-model="form.title" type="text" class="mt-1 block w-md"
+                                <TextInput v-model="form.title" type="text" class="mt-1 block w-full"
                                     :class="v$.form.title.$error === true ? 'border-gray-300 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50 rounded-md shadow-sm' : ''" />
                             </div>
                             <ckeditor :config="config" :editor="editor" v-model="form.content"
@@ -68,7 +69,16 @@ export default {
             isButtonDisabled: true,
             editor: ClassicEditor,
             config: {
-
+                image: {
+                    toolbar: ['imageTextAlternative'],
+                    styles: ['full', 'side']
+                },
+                ckfinder: {
+                    uploadUrl: '/blog/upload',
+                    headers: {
+                        'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content
+                    }
+                },
             },
         };
     },
@@ -87,6 +97,9 @@ export default {
         InputLabel,
     },
     methods: {
+        updateData(event) {
+            this.content = event.editor.getData();
+        },
         submitForm() {
             this.isLoading = true;
             document.getElementById("submitBtn").disabled = true;
