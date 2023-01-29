@@ -2,9 +2,22 @@
 
     <AppLayout title="Blog - Create">
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Blog Create
-            </h2>
+            <div class="flex">
+                <div>
+                    <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                        Blog Create
+                    </h2>
+                </div>
+                <div class="ml-auto">
+                    <Link :href="route('blog.index')">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
+                    </svg>
+                    </Link>
+                </div>
+            </div>
         </template>
 
         <div class="py-12">
@@ -47,7 +60,9 @@
 
 <script>
 import AppLayout from '@/Layouts/AppLayout.vue';
+import { Link } from "@inertiajs/inertia-vue3";
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import ImageResize from '@ckeditor/ckeditor5-image/src/imageresize';
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import InputLabel from "@/Components/InputLabel.vue";
@@ -67,13 +82,14 @@ export default {
             },
             isLoading: false,
             isButtonDisabled: true,
-            editor: ClassicEditor,
+            editor: ClassicEditor.builtinPlugins.concat([ImageResize]),
             config: {
                 image: {
                     toolbar: ['imageTextAlternative'],
                     styles: ['full', 'side']
                 },
                 ckfinder: {
+                    // uploadUrl: '/image-upload?_token='+$("input[name='_token']").val(),
                     uploadUrl: '/blog/upload',
                     headers: {
                         'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content
@@ -82,6 +98,26 @@ export default {
             },
         };
     },
+    mounted() {
+    this.editor.ui.componentFactory.add('insertImage', function(editor) {
+      const command = editor.commands.get('insertImage');
+      const view = new editor.ui.ButtonView(editor);
+
+      view.set({
+        label: 'Insert Image',
+        withText: true,
+        tooltip: true
+      });
+
+      view.on('execute', function() {
+        if (command.state === 'ready') {
+          command.execute();
+        }
+      });
+
+      return view;
+    });
+  },
     validations() {
         return {
             form: {
@@ -95,6 +131,7 @@ export default {
         PrimaryButton,
         TextInput,
         InputLabel,
+        Link,
     },
     methods: {
         updateData(event) {

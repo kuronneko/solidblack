@@ -1,9 +1,21 @@
 <template>
     <AppLayout title="Blog">
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Blog
-            </h2>
+            <div class="flex">
+                <div>
+                    <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                        Blog
+                    </h2>
+                </div>
+                <div class="ml-auto">
+                        <Link :href="route('blog.create')">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                        </svg>
+                    </Link>
+                </div>
+            </div>
         </template>
 
         <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
@@ -11,14 +23,7 @@
                 <div class="p-4 sm:px-6">
 
                     <form method="get" class="flex mt-2" @submit.prevent="searchBlog">
-                        <Link :href="route('blog.create')">
-                        <JetPrimaryButton class="mr-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                stroke="currentColor" class="w-6 h-6">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                            </svg>
-                        </JetPrimaryButton>
-                        </Link>
+
                         <jet-input v-model="form.search" id="search" class="w-full" @keydown.delete="clearKeyDown()"
                             placeholder="Search by title" type="text" />
                         <jet-primary-button type="submit" class="ml-1">Search
@@ -151,23 +156,23 @@ export default {
     methods: {
         showBlog: function (blog) {
             Inertia.get(route("blog.show", blog));
-/*             this.$swal({
-                position: 'center',
-                color: '#00000',
-                confirmButtonColor: '#212529',
-                width: 1200,
-                background: '#fff',
-                title: 'Blog Detail',
-                html: `
-                <div>
-                    <span><small>${moment(blog.created_at).format('MMMM Do YYYY, h:mm:ss a')}</small></span>
-                    <br><br>
-                    <span><strong>${blog.title}</strong></span>
-                    <br><br>
-                    <span>${blog.content}</span>
-                </div>
-                `
-            }); */
+            /*             this.$swal({
+                            position: 'center',
+                            color: '#00000',
+                            confirmButtonColor: '#212529',
+                            width: 1200,
+                            background: '#fff',
+                            title: 'Blog Detail',
+                            html: `
+                            <div>
+                                <span><small>${moment(blog.created_at).format('MMMM Do YYYY, h:mm:ss a')}</small></span>
+                                <br><br>
+                                <span><strong>${blog.title}</strong></span>
+                                <br><br>
+                                <span>${blog.content}</span>
+                            </div>
+                            `
+                        }); */
         },
         deleteBlog: function (blog) {
             this.$swal({
