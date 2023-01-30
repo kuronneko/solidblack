@@ -27,7 +27,7 @@ class BlogController extends Controller
             $blogs = $blogs->where('title', 'like', '%' . $search . '%')->where('user_id', Auth::user()->id);
         }
         $blogs = $blogs->paginate(10)->appends(request()->except("page"));
-        return Inertia::render('Blog/Index', compact('blogs','search'));
+        return Inertia::render('Blog/Index', compact('blogs', 'search'));
     }
 
     /**
@@ -48,14 +48,14 @@ class BlogController extends Controller
      */
     public function upload(Request $request)
     {
-         // Get the uploaded file
+        // Get the uploaded file
         //$file = $request->file('upload');
 
         // Generate a unique file name
         //$fileName = uniqid() . '.' . $file->getClientOriginalExtension();
 
         // Save the file to your desired location
-       // $file->storeAs('public/imagenes', $fileName);
+        // $file->storeAs('public/imagenes', $fileName);
 
         // Return the response in the format required by CKEditor
         return response()->json([
@@ -91,7 +91,16 @@ class BlogController extends Controller
                 $imgNewfileName = md5($img->getClientOriginalName());
 
                 //guardar la imagen en el storage
-                $imgRenderized = ImageManagerStatic::make($img->getRealPath());
+                if ((ImageManagerStatic::make($img->getRealPath())->width() > ImageManagerStatic::make($img->getRealPath())->height()) || (ImageManagerStatic::make($img->getRealPath())->width() == ImageManagerStatic::make($img->getRealPath())->height())) { //check dimension of image
+                    $imgRenderized = ImageManagerStatic::make($img->getRealPath())->resize(720, null, function ($constraint) { //resize image based on width
+                        $constraint->aspectRatio();
+                    })->resizeCanvas(720, null);
+                } elseif (ImageManagerStatic::make($img->getRealPath())->width() < ImageManagerStatic::make($img->getRealPath())->height()) {
+                    $imgRenderized = ImageManagerStatic::make($img->getRealPath())->resize(null, 720, function ($constraint) { //Resize image based on height
+                        $constraint->aspectRatio();
+                    })->resizeCanvas(null, 720);
+                }
+                //$imgRenderized = ImageManagerStatic::make($img->getRealPath());
                 $imgRenderized->save(public_path('/storage/imagenes/' . $imgNewfileName . '.' . $img->getClientOriginalExtension()), 100);
 
                 //ruta referencial
@@ -136,9 +145,9 @@ class BlogController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Blog $blog)
     {
-        //
+        return Inertia::render('Blog/Edit', compact('blog'));
     }
 
     /**
