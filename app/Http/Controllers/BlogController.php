@@ -92,13 +92,13 @@ class BlogController extends Controller
 
                 //guardar la imagen en el storage
                 if ((ImageManagerStatic::make($img->getRealPath())->width() > ImageManagerStatic::make($img->getRealPath())->height()) || (ImageManagerStatic::make($img->getRealPath())->width() == ImageManagerStatic::make($img->getRealPath())->height())) { //check dimension of image
-                    $imgRenderized = ImageManagerStatic::make($img->getRealPath())->resize(720, null, function ($constraint) { //resize image based on width
+                    $imgRenderized = ImageManagerStatic::make($img->getRealPath())->resize(250, null, function ($constraint) { //resize image based on width
                         $constraint->aspectRatio();
-                    })->resizeCanvas(720, null);
+                    })->resizeCanvas(250, null);
                 } elseif (ImageManagerStatic::make($img->getRealPath())->width() < ImageManagerStatic::make($img->getRealPath())->height()) {
-                    $imgRenderized = ImageManagerStatic::make($img->getRealPath())->resize(null, 720, function ($constraint) { //Resize image based on height
+                    $imgRenderized = ImageManagerStatic::make($img->getRealPath())->resize(null, 250, function ($constraint) { //Resize image based on height
                         $constraint->aspectRatio();
-                    })->resizeCanvas(null, 720);
+                    })->resizeCanvas(null, 250);
                 }
                 //$imgRenderized = ImageManagerStatic::make($img->getRealPath());
                 $imgRenderized->save(public_path('/storage/imagenes/' . $imgNewfileName . '.' . $img->getClientOriginalExtension()), 100);
@@ -157,9 +157,14 @@ class BlogController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreBlogRequest $request)
     {
-        //
+        $blog = Blog::findOrFail(request('blog'));
+        $blog->update([
+            'title' => $request->title,
+            'content' => $request->content,
+        ]);
+        return redirect()->route('blog.index');
     }
 
     /**

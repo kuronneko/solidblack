@@ -30,7 +30,7 @@
                                 <TextInput v-model="form.title" type="text" class="mt-1 block w-full"
                                     :class="v$.form.title.$error === true ? 'border-gray-300 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50 rounded-md shadow-sm' : ''" />
                             </div>
-                            <ckeditor :config="config" :editor="editor" v-model="form.content"
+                            <ckeditor :config="config" :editor="editor" v-model="form.content" class="ck-content"
                                 :class="v$.form.content.$error === true ? 'border-gray-300 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50 rounded-md shadow-sm' : ''">
                             </ckeditor>
                             <PrimaryButton v-if="isLoading === false" type="submit" id="submitBtn"
@@ -86,11 +86,13 @@ export default {
             //editor: ClassicEditor.builtinPlugins.concat([ImageResize]),
             config: {
                 image: {
-                    toolbar: ['imageTextAlternative'],
+                    //toolbar: [ 'imageStyle:inline', 'imageStyle:block', 'imageStyle:side', '|', 'toggleImageCaption', 'imageTextAlternative' ],
+                    //toolbar: ['imageTextAlternative'],
                     styles: ['full', 'side']
                 },
                 ckfinder: {
                     // uploadUrl: '/image-upload?_token='+$("input[name='_token']").val(),
+                    // uploadUrl: '/image-upload?_token='document.head.querySelector('meta[name="csrf-token"]').content,  TRY WITH THIS
                     uploadUrl: '/blog/upload',
                     headers: {
                         'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content
@@ -99,26 +101,26 @@ export default {
             },
         };
     },
-/*       mounted() {
-    this.editor.ui.componentFactory.add('insertImage', function(editor) {
-      const command = editor.commands.get('insertImage');
-      const view = new editor.ui.ButtonView(editor);
+    /*       mounted() {
+        this.editor.ui.componentFactory.add('insertImage', function(editor) {
+          const command = editor.commands.get('insertImage');
+          const view = new editor.ui.ButtonView(editor);
 
-      view.set({
-        label: 'Insert Image',
-        withText: true,
-        tooltip: true
-      });
+          view.set({
+            label: 'Insert Image',
+            withText: true,
+            tooltip: true
+          });
 
-      view.on('execute', function() {
-        if (command.state === 'ready') {
-          command.execute();
-        }
-      });
+          view.on('execute', function() {
+            if (command.state === 'ready') {
+              command.execute();
+            }
+          });
 
-      return view;
-    });
-  }, */
+          return view;
+        });
+      }, */
     validations() {
         return {
             form: {
@@ -178,9 +180,3 @@ export default {
     },
 };
 </script>
-
-<style>
-.ck-editor__editable {
-    min-height: 500px;
-}
-</style>

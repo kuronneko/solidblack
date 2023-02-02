@@ -14,6 +14,7 @@
         @routes
         @vite('resources/js/app.js')
         @inertiaHead
+        <script async charset="utf-8" src="//cdn.embedly.com/widgets/platform.js"></script>
     </head>
     <body class="font-sans antialiased">
         @inertia

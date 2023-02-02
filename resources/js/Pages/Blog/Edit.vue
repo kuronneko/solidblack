@@ -30,7 +30,7 @@
                                 <TextInput v-model="form.title" type="text" class="mt-1 block w-full"
                                     :class="v$.form.title.$error === true ? 'border-gray-300 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50 rounded-md shadow-sm' : ''" />
                             </div>
-                            <ckeditor :config="config" :editor="editor" v-model="form.content"
+                            <ckeditor :config="config" :editor="editor" v-model="form.content" class="ck-content"
                                 :class="v$.form.content.$error === true ? 'border-gray-300 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50 rounded-md shadow-sm' : ''">
                             </ckeditor>
                             <PrimaryButton v-if="isLoading === false" type="submit" id="submitBtn"
@@ -89,7 +89,7 @@ export default {
             //editor: ClassicEditor.builtinPlugins.concat([ImageResize]),
             config: {
                 image: {
-                    toolbar: ['imageTextAlternative'],
+                    //toolbar: ['imageTextAlternative'],
                     styles: ['full', 'side']
                 },
                 ckfinder: {
@@ -133,7 +133,11 @@ export default {
                             title: 'Blog edited'
                         })
                         this.isLoading = false;
-                        Inertia.post(route("blog.store", { 'title': this.form.title, 'content': this.form.content }));
+                        Inertia.post(route("blog.update", { 'blog': this.blog.id, 'title': this.form.title, 'content': this.form.content }),
+                        {
+                            _method: 'put',
+                        });
+                        //Inertia.post(route("blog.update", { 'blog': this.blog, 'title': this.form.title, 'content': this.form.content }));
                     }, 1000)
                 } else {
                     this.Toast().fire({
@@ -161,9 +165,3 @@ export default {
     },
 };
 </script>
-
-<style>
-.ck-editor__editable {
-    min-height: 500px;
-}
-</style>

@@ -22,10 +22,9 @@
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-                    <div class="p-4 sm:px-6">
-                        <div>{{ moment(blog.created_at).format('MMMM Do YYYY, h:mm:ss a') }}</div>
-                        <div>{{ blog.title }}</div>
+                    <div class="p-4 sm:px-6 ck-content">
                         <div v-html="blog.content"></div>
+                        <p class="text-xs text-right mt-10">{{ moment(blog.created_at).format('MMMM Do YYYY, h:mm:ss a') }}</p>
                     </div>
                 </div>
             </div>
@@ -54,6 +53,18 @@ export default {
             moment: moment,
         };
     },
+    mounted(){
+        document.querySelectorAll( 'oembed[url]' ).forEach( element => {
+        // Create the <a href="..." class="embedly-card"></a> element that Embedly uses
+        // to discover the media.
+        const anchor = document.createElement( 'a' );
+
+        anchor.setAttribute( 'href', element.getAttribute( 'url' ) );
+        anchor.className = 'embedly-card';
+
+        element.appendChild( anchor );
+    } );
+    },
     components: {
         AppLayout,
         PrimaryButton,
@@ -66,3 +77,4 @@ export default {
     },
 };
 </script>
+

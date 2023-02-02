@@ -1,14 +1,15 @@
 <?php
 
-use App\Http\Controllers\BlogController;
+use App\Models\Blog;
 use App\Models\User;
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Jenssegers\Agent\Facades\Agent;
-use Stevebauman\Location\Facades\Location;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Request;
+use App\Http\Controllers\BlogController;
+use Stevebauman\Location\Facades\Location;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +28,7 @@ Route::get('/', function () {
         'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
+        'blogs' => Blog::orderBy('created_at', 'desc')->get(),
     ]);
 });
 
