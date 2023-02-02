@@ -92,20 +92,25 @@ class BlogController extends Controller
 
                 //guardar la imagen en el storage
                 if ((ImageManagerStatic::make($img->getRealPath())->width() > ImageManagerStatic::make($img->getRealPath())->height()) || (ImageManagerStatic::make($img->getRealPath())->width() == ImageManagerStatic::make($img->getRealPath())->height())) { //check dimension of image
-                    $imgRenderized = ImageManagerStatic::make($img->getRealPath())->resize(250, null, function ($constraint) { //resize image based on width
+                    $imgRenderized = ImageManagerStatic::make($img->getRealPath())->resize(720, null, function ($constraint) { //resize image based on width
+                        $constraint->aspectRatio();
+                    })->resizeCanvas(720, null);
+                    $imgRenderizedThumb = ImageManagerStatic::make($img->getRealPath())->resize(250, null, function ($constraint) { //resize image based on width
                         $constraint->aspectRatio();
                     })->resizeCanvas(250, null);
                 } elseif (ImageManagerStatic::make($img->getRealPath())->width() < ImageManagerStatic::make($img->getRealPath())->height()) {
-                    $imgRenderized = ImageManagerStatic::make($img->getRealPath())->resize(null, 250, function ($constraint) { //Resize image based on height
+                    $imgRenderized = ImageManagerStatic::make($img->getRealPath())->resize(null, 720, function ($constraint) { //Resize image based on height
+                        $constraint->aspectRatio();
+                    })->resizeCanvas(null, 720);
+                    $imgRenderizedThumb = ImageManagerStatic::make($img->getRealPath())->resize(null, 250, function ($constraint) { //Resize image based on height
                         $constraint->aspectRatio();
                     })->resizeCanvas(null, 250);
                 }
                 //$imgRenderized = ImageManagerStatic::make($img->getRealPath());
                 $imgRenderized->save(public_path('/storage/imagenes/' . $imgNewfileName . '.' . $img->getClientOriginalExtension()), 100);
-
+                $imgRenderizedThumb->save(public_path('/storage/imagenes/' . $imgNewfileName . '_thumb.' . $img->getClientOriginalExtension()), 100);
                 //ruta referencial
-                $imgUrl = Storage::url('public/imagenes/' . $imgNewfileName . '.' . $img->getClientOriginalExtension());
-                return $imgUrl;
+                return Storage::url('public/imagenes/' . $imgNewfileName . '_thumb.' . $img->getClientOriginalExtension());
             }
         } catch (\Throwable $th) {
             return response()->json(['error' => $th->getMessage()]);

@@ -4,18 +4,29 @@ import Welcome from '@/Components/Welcome.vue';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import moment from "moment";
 import { onMounted } from 'vue';
-    onMounted(() => {
-        document.querySelectorAll( 'oembed[url]' ).forEach( element => {
+onMounted(() => {
+    const imgs = document.querySelectorAll('img');
+    imgs.forEach(img => {
+        const newSrc = img.src.replace('_thumb', '');
+        const a = document.createElement('a');
+        a.setAttribute('href', newSrc);
+        a.setAttribute('data-fancybox', 'images');
+        const parent = img.parentNode;
+        parent.insertBefore(a, img);
+        a.appendChild(img);
+    });
+
+    document.querySelectorAll('oembed[url]').forEach(element => {
         // Create the <a href="..." class="embedly-card"></a> element that Embedly uses
         // to discover the media.
-        const anchor = document.createElement( 'a' );
+        const anchor = document.createElement('a');
 
-        anchor.setAttribute( 'href', element.getAttribute( 'url' ) );
+        anchor.setAttribute('href', element.getAttribute('url'));
         anchor.className = 'embedly-card';
 
-        element.appendChild( anchor );
-    } );
+        element.appendChild(anchor);
     });
+});
 defineProps({
     canLogin: Boolean,
     canRegister: Boolean,
@@ -47,7 +58,9 @@ defineProps({
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                     <div class="p-4 sm:px-6 ck-content">
                         <div v-html="blog.content"></div>
-                        <p class="text-xs text-right mt-10">{{ moment(blog.created_at).format('MMMM Do YYYY, h:mm:ss a') }}</p>
+                        <p class="text-xs text-right mt-10">{{
+                            moment(blog.created_at).format('MMMM Do YYYY, h:mm:ss a')
+                        }}</p>
                     </div>
                 </div>
             </div>

@@ -14,6 +14,10 @@ import 'ckeditor-tailwind-reset/ckeditor-tailwind-reset.css'
 import VueAxios from 'vue-axios';
 import axios from 'axios';
 import CKEditor from '@ckeditor/ckeditor5-vue';
+
+import "@fancyapps/ui";
+import "@fancyapps/ui/dist/fancybox.css";
+
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
 
 createInertiaApp({
@@ -31,3 +35,4 @@ createInertiaApp({
 });
 
 InertiaProgress.init({ color: '#4B5563' });
+
