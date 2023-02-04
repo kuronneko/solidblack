@@ -28,7 +28,7 @@ Route::get('/', function () {
         'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
-        'blogs' => Blog::orderBy('created_at', 'desc')->get(),
+        'blogs' => Blog::where('status', 2)->orderBy('updated_at', 'desc')->get(),
     ]);
 });
 

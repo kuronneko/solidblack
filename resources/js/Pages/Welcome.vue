@@ -5,17 +5,6 @@ import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import moment from "moment";
 import { onMounted } from 'vue';
 onMounted(() => {
-    const imgs = document.querySelectorAll('img');
-    imgs.forEach(img => {
-        const newSrc = img.src.replace('_thumb', '');
-        const a = document.createElement('a');
-        a.setAttribute('href', newSrc);
-        a.setAttribute('data-fancybox', 'images');
-        const parent = img.parentNode;
-        parent.insertBefore(a, img);
-        a.appendChild(img);
-    });
-
     document.querySelectorAll('oembed[url]').forEach(element => {
         // Create the <a href="..." class="embedly-card"></a> element that Embedly uses
         // to discover the media.

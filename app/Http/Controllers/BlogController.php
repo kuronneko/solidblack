@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Blog;
 use Inertia\Inertia;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -20,11 +21,11 @@ class BlogController extends Controller
      */
     public function index()
     {
-        $blogs = Blog::where('user_id', Auth::user()->id)->orderBy("created_at", 'desc');
+        $blogs = Blog::where('user_id', Auth::user()->id)->orderBy("updated_at", 'desc');
         $search = "";
         if (request()->has("search")) {
             $search = request("search");
-            $blogs = $blogs->where('title', 'like', '%' . $search . '%')->where('user_id', Auth::user()->id);
+            $blogs = $blogs->where('name', 'like', '%' . $search . '%')->where('user_id', Auth::user()->id);
         }
         $blogs = $blogs->paginate(10)->appends(request()->except("page"));
         return Inertia::render('Blog/Index', compact('blogs', 'search'));
@@ -37,7 +38,13 @@ class BlogController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Blog/Create');
+        $blog = Blog::create([
+            'user_id' => Auth::user()->id,
+            'name' => '',
+            'content' => '',
+            'slug' => '',
+        ]);
+        return Inertia::render('Blog/Create', compact('blog'));
     }
 
     /**
@@ -58,21 +65,22 @@ class BlogController extends Controller
         // $file->storeAs('public/imagenes', $fileName);
 
         // Return the response in the format required by CKEditor
+
         return response()->json([
             'uploaded' => true,
-            'url' => self::uploadImagen($request->file('upload'))
+            'url' => self::uploadImagen($request->file('upload'), $request->blog)
             //'url' => asset('storage/imagenes/' . $fileName)
         ]);
     }
 
-    public function creacionVerificacionCarpetas()
+    public function creacionVerificacionCarpetas($blogId)
     {
         try {
             //verificación y o creación de la carpeta para las imagenes basadas en el nombre de la pagina, utilizando su slug
-            if (!file_exists(public_path('/storage/imagenes/'))) {
-                mkdir(public_path('/storage/imagenes/'), 0755, true);
+            if (!file_exists(public_path('/storage/images/' . $blogId))) {
+                mkdir(public_path('/storage/images/' . $blogId), 0755, true);
                 return true;
-            } elseif (file_exists(public_path('/storage/imagenes/'))) {
+            } elseif (file_exists(public_path('/storage/images/' . $blogId))) {
                 return true;
             } else {
                 return false;
@@ -82,11 +90,11 @@ class BlogController extends Controller
         }
     }
 
-    public function uploadImagen($img)
+    public function uploadImagen($img, $blogId)
     {
         try {
             //verificar el archivo y la carpeta contenedora
-            if ($img && self::creacionVerificacionCarpetas()) {
+            if ($img && self::creacionVerificacionCarpetas($blogId)) {
                 //nombre del archivo formateado a md5
                 $imgNewfileName = md5($img->getClientOriginalName());
 
@@ -107,10 +115,10 @@ class BlogController extends Controller
                     })->resizeCanvas(null, 250);
                 }
                 //$imgRenderized = ImageManagerStatic::make($img->getRealPath());
-                $imgRenderized->save(public_path('/storage/imagenes/' . $imgNewfileName . '.' . $img->getClientOriginalExtension()), 100);
-                $imgRenderizedThumb->save(public_path('/storage/imagenes/' . $imgNewfileName . '_thumb.' . $img->getClientOriginalExtension()), 100);
+                $imgRenderized->save(public_path('/storage/images/' . $blogId . '/' . $imgNewfileName . '.' . $img->getClientOriginalExtension()), 100);
+                $imgRenderizedThumb->save(public_path('/storage/images/' . $blogId . '/' . $imgNewfileName . '_thumb.' . $img->getClientOriginalExtension()), 100);
                 //ruta referencial
-                return Storage::url('public/imagenes/' . $imgNewfileName . '_thumb.' . $img->getClientOriginalExtension());
+                return Storage::url('public/images/' . $blogId . '/' . $imgNewfileName . '_thumb.' . $img->getClientOriginalExtension());
             }
         } catch (\Throwable $th) {
             return response()->json(['error' => $th->getMessage()]);
@@ -125,12 +133,12 @@ class BlogController extends Controller
      */
     public function store(StoreBlogRequest $request)
     {
-        Blog::create([
+        /*         Blog::create([
             'user_id' => Auth::user()->id,
             'title' => $request->title,
             'content' => $request->content,
         ]);
-        return redirect()->route('blog.index');
+        return redirect()->route('blog.index'); */
     }
 
     /**
@@ -166,8 +174,10 @@ class BlogController extends Controller
     {
         $blog = Blog::findOrFail(request('blog'));
         $blog->update([
-            'title' => $request->title,
+            'name' => $request->name,
             'content' => $request->content,
+            'slug' => Str::slug($request->name),
+            'status' => $request->status,
         ]);
         return redirect()->route('blog.index');
     }
@@ -180,6 +190,10 @@ class BlogController extends Controller
      */
     public function destroy(Blog $blog)
     {
+        $folderPath = 'public/images/' . $blog->id;
+        if (Storage::exists($folderPath)) {  //check if folder exist
+            Storage::deleteDirectory($folderPath);
+        }
         $blog->delete();
         return redirect()->back();
     }

@@ -25,10 +25,23 @@
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                     <div class="p-4 sm:px-6">
                         <form @submit.prevent="submitForm">
-                            <div class="mb-2">
-                                <InputLabel for="title" value="Title" />
-                                <TextInput v-model="form.title" type="text" class="mt-1 block w-full"
-                                    :class="v$.form.title.$error === true ? 'border-gray-300 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50 rounded-md shadow-sm' : ''" />
+                            <div class="container mb-3">
+                                <div class="grid sm:grid-cols-2 grid-cols-1">
+                                    <div class="mr-1">
+                                        <InputLabel for="name" value="Name" />
+                                        <TextInput v-model="form.name" type="text" class="block w-full"
+                                            :class="v$.form.name.$error === true ? 'border-gray-300 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50 rounded-md shadow-sm' : ''" />
+                                    </div>
+                                    <div>
+                                        <InputLabel for="status" value="Status" />
+                                        <select v-model="form.status"
+                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500">
+                                            <option v-for="option in options" :key="option.value" :value="option.value">
+                                                {{ option.text }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                             <ckeditor :config="config" :editor="editor" v-model="form.content" class="ck-content"
                                 :class="v$.form.content.$error === true ? 'border-gray-300 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50 rounded-md shadow-sm' : ''">
@@ -80,9 +93,15 @@ export default {
     data() {
         return {
             form: {
-                title: this.blog.title,
-                content: this.blog.content
+                name: this.blog.name,
+                content: this.blog.content,
+                status: this.blog.status
             },
+            options: [
+                { text: 'Discarded', value: 0 },
+                { text: 'Posted [Not public visible]', value: 1 },
+                { text: 'Published [Public visible]', value: 2 },
+            ],
             isLoading: false,
             isButtonDisabled: true,
             editor: ClassicEditor,
@@ -94,7 +113,7 @@ export default {
                 },
                 ckfinder: {
                     // uploadUrl: '/image-upload?_token='+$("input[name='_token']").val(),
-                    uploadUrl: '/blog/upload',
+                    uploadUrl: '/blog/upload?blog=' + this.blog.id,
                     headers: {
                         'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content
                     }
@@ -105,7 +124,7 @@ export default {
     validations() {
         return {
             form: {
-                title: { required, $autoDirty: true },
+                name: { required, $autoDirty: true },
                 content: { required, $autoDirty: true },
             }
         }
@@ -133,10 +152,10 @@ export default {
                             title: 'Blog edited'
                         })
                         this.isLoading = false;
-                        Inertia.post(route("blog.update", { 'blog': this.blog.id, 'title': this.form.title, 'content': this.form.content }),
-                        {
-                            _method: 'put',
-                        });
+                        Inertia.post(route("blog.update", { 'blog': this.blog.id, 'name': this.form.name, 'content': this.form.content, 'status': this.form.status }),
+                            {
+                                _method: 'put',
+                            });
                         //Inertia.post(route("blog.update", { 'blog': this.blog, 'title': this.form.title, 'content': this.form.content }));
                     }, 1000)
                 } else {

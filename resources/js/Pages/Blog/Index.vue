@@ -25,7 +25,7 @@
                     <form method="get" class="flex mt-2" @submit.prevent="searchBlog">
 
                         <jet-input v-model="form.search" id="search" class="w-full" @keydown.delete="clearKeyDown()"
-                            placeholder="Search by title" type="text" />
+                            placeholder="Search by name" type="text" />
                         <jet-primary-button type="submit" class="ml-1">Search
                         </jet-primary-button>
                         <jet-primary-button v-if="$page.props.search" @click="clear()" class="ml-1">
@@ -43,25 +43,34 @@
                                 class='mx-auto max-w-7x1 w-full whitespace-nowrap rounded-lg bg-white divide-y divide-gray-300 overflow-hidden'>
                                 <thead class="bg-gray-800">
                                     <tr class="text-white text-left">
-                                        <th class="font-semibold text-sm uppercase px-6 py-4"> Title </th>
+                                        <th class="font-semibold text-sm uppercase px-6 py-4"> ID </th>
+                                        <th class="font-semibold text-sm uppercase px-6 py-4"> Name </th>
                                         <th class="font-semibold text-sm uppercase px-6 py-4"> Date/Time </th>
+                                        <th class="font-semibold text-sm uppercase px-6 py-4"> Status </th>
                                         <th class="font-semibold text-sm uppercase px-6 py-4"> Options</th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-gray-200">
                                     <tr v-for="blog in blogs.data" :key="blog.id">
                                         <td class="px-6 py-4">
-                                            <p class=""> {{ blog.title }} </p>
+                                            <p class=""> {{ blog.id }} </p>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <p class=""> {{ blog.name }} </p>
                                         </td>
                                         <td class="px-6 py-4">
                                             <div class="flex items-center space-x-3">
                                                 <div>
-                                                    <p> {{ moment(blog.created_at).format('MMMM Do YYYY, h:mm:ss a') }}
+                                                    <p> {{ moment(blog.updated_at).format('MMMM Do YYYY, h:mm:ss a') }}
                                                     </p>
                                                 </div>
                                             </div>
                                         </td>
-
+                                        <td class="px-6 py-4">
+                                            <p class="text-blue-500" v-if="blog.status === 1">Posted</p>
+                                            <p class="text-green-500" v-else-if="blog.status === 2">Published</p>
+                                            <p class="text-red-500" v-else-if="blog.status === 0">Discarded</p>
+                                        </td>
                                         <td class="px-6 py-4">
                                             <!--                                             <jet-primary-button>
                                                 <Link :href="

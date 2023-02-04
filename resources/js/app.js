@@ -15,9 +15,6 @@ import VueAxios from 'vue-axios';
 import axios from 'axios';
 import CKEditor from '@ckeditor/ckeditor5-vue';
 
-import "@fancyapps/ui";
-import "@fancyapps/ui/dist/fancybox.css";
-
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
 
 createInertiaApp({

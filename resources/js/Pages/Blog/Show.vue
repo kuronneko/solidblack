@@ -25,7 +25,7 @@
                     <div class="p-4 sm:px-6 ck-content">
                         <div v-html="blog.content"></div>
                         <p class="text-xs text-right mt-10">{{
-                            moment(blog.created_at).format('MMMM Do YYYY, h:mm:ss a')
+                            moment(blog.updated_at).format('MMMM Do YYYY, h:mm:ss a')
                         }}</p>
                     </div>
                 </div>
@@ -45,6 +45,8 @@ import { Inertia } from "@inertiajs/inertia";
 import useVuelidate from '@vuelidate/core'
 import { required, url } from '@vuelidate/validators'
 import moment from "moment";
+import { Fancybox } from "@fancyapps/ui";
+import "@fancyapps/ui/dist/fancybox.css";
 
 export default {
     props: {
@@ -56,8 +58,17 @@ export default {
         };
     },
     mounted() {
+        Fancybox.bind('[data-fancybox="images"]', {
+            Toolbar: {
+                display: [
+                    "close",
+                ],
+            },
+        });
+        //encapsule <a data-fancybox='images'> on <img> tag
         const imgs = document.querySelectorAll('img');
         imgs.forEach(img => {
+            //replace thumb with a original img url
             const newSrc = img.src.replace('_thumb', '');
             const a = document.createElement('a');
             a.setAttribute('href', newSrc);
@@ -84,6 +95,7 @@ export default {
         TextInput,
         InputLabel,
         Link,
+        Fancybox,
     },
     methods: {
 
