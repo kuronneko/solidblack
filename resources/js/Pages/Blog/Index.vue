@@ -67,9 +67,26 @@
                                             </div>
                                         </td>
                                         <td class="px-6 py-4">
-                                            <p class="text-blue-500" v-if="blog.status === 1">Posted</p>
-                                            <p class="text-green-500" v-else-if="blog.status === 2">Published</p>
-                                            <p class="text-red-500" v-else-if="blog.status === 0">Discarded</p>
+
+                                                <div preserve-scroll v-if="blog.status === 1"
+                                                    @click.once="toggleStatus(blog)" for="default-toggle"
+                                                    class="inline-flex relative items-center cursor-pointer">
+                                                    <input type="checkbox" value="" id="default-toggle"
+                                                        class="sr-only peer">
+                                                    <div
+                                                        class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-gray-300 dark:peer-focus:ring-gray-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-gray-600">
+                                                    </div>
+                                                </div>
+                                                <div preserve-scroll v-else
+                                                    @click.once="toggleStatus(blog)" for="checked-toggle"
+                                                    class="inline-flex relative items-center cursor-pointer">
+                                                    <input type="checkbox" value="" id="checked-toggle"
+                                                        class="sr-only peer" checked>
+                                                    <div
+                                                        class="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-gray-300 dark:peer-focus:ring-gray-800 dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-gray-600">
+                                                    </div>
+                                                </div>
+
                                         </td>
                                         <td class="px-6 py-4">
                                             <!--                                             <jet-primary-button>
@@ -148,7 +165,7 @@ import moment from "moment";
 export default {
     props: {
         blogs: Object,
-        blog: Object,
+        //blog: Object,
         search: String,
     },
     data() {
@@ -219,7 +236,40 @@ export default {
         clear: function () {
             this.form.search = '';
             Inertia.get(route("blog.index"));
-        }
+        },
+        toggleStatus: function (blog) {
+            setTimeout(() => {
+                Inertia.post(route("blog.toggle.status", blog),
+                    {
+                        _method: 'put',
+                    });
+                if (blog.status == 1) {
+                    //message is inverse because "blog that come here is the same previious edit"
+                    this.Toast().fire({
+                        icon: 'success',
+                        title: 'Blog active'
+                    })
+                } else {
+                    this.Toast().fire({
+                        icon: 'success',
+                        title: 'Blog inactive'
+                    })
+                }
+            }, 500)
+        },
+        Toast() {
+            return this.$swal.mixin({
+                toast: true,
+                position: 'top',
+                showConfirmButton: false,
+                timer: 1700,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', this.$swal.stopTimer)
+                    toast.addEventListener('mouseleave', this.$swal.resumeTimer)
+                }
+            })
+        },
     },
 };
 </script>

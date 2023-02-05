@@ -98,8 +98,8 @@ export default {
                 status: 1,
             },
             options: [
-                { text: 'Posted [Not public visible]', value: 1 },
-                { text: 'Published [Public visible]', value: 2 },
+                { text: 'Inactive', value: 1 },
+                { text: 'Active', value: 2 },
             ],
             isLoading: false,
             isButtonDisabled: true,

@@ -21,7 +21,7 @@ class BlogController extends Controller
      */
     public function index()
     {
-        $blogs = Blog::where('user_id', Auth::user()->id)->orderBy("updated_at", 'desc');
+        $blogs = Blog::where('user_id', Auth::user()->id)->whereIn('status', [1,2])->orderBy("created_at", 'desc');
         $search = "";
         if (request()->has("search")) {
             $search = request("search");
@@ -152,6 +152,17 @@ class BlogController extends Controller
         return Inertia::render('Blog/Show', compact('blog'));
     }
 
+        /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function showWithSlug(Blog $blog)
+    {
+        //$blog = Blog::where('slug', request('slug'))->first();
+        return Inertia::render('Blog', compact('blog'));
+    }
     /**
      * Show the form for editing the specified resource.
      *
@@ -163,6 +174,24 @@ class BlogController extends Controller
         return Inertia::render('Blog/Edit', compact('blog'));
     }
 
+    public function toggleStatus(Blog $blog){
+        try {
+            if(auth()->user()->id == $blog->user_id){
+                if($blog->status == 2){
+                    $blog->status = 1;
+                }else{
+                    $blog->status = 2;
+                }
+                $blog->timestamps = false;
+                $blog->save();
+                return redirect()->back();
+            }else{
+                return response()->json(['error' => 'Access deny']);
+            }
+        } catch (\Throwable $th) {
+            return response()->json(['error' => $th->getMessage()]);
+        }
+    }
     /**
      * Update the specified resource in storage.
      *

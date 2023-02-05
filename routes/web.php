@@ -28,9 +28,9 @@ Route::get('/', function () {
         'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
-        'blogs' => Blog::where('status', 2)->orderBy('updated_at', 'desc')->get(),
+        'blogs' => Blog::where('status', 2)->orderBy('created_at', 'desc')->get(),
     ]);
-});
+})->name('welcome');;
 
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',])->group(function () {
     Route::get('/dashboard', function () {
@@ -38,4 +38,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     })->name('dashboard');
     Route::resource('blog', BlogController::class);
     Route::post('blog/upload', [BlogController::class, 'upload'])->name('blog.upload');
+    Route::put('blog/toggle-status/{blog}', [BlogController::class, 'toggleStatus'])->name('blog.toggle.status');
 });
+Route::get('{blog:slug}', [BlogController::class, 'showWithSlug'])->name('blog.show.with.slug');
