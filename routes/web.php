@@ -28,7 +28,6 @@ Route::get('/', function () {
         'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
-        'blogs' => Blog::where('status', 2)->orderBy('created_at', 'desc')->get(),
     ]);
 })->name('welcome');;
 
@@ -41,3 +40,4 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     Route::put('blog/toggle-status/{blog}', [BlogController::class, 'toggleStatus'])->name('blog.toggle.status');
 });
 Route::get('{blog:slug}', [BlogController::class, 'showWithSlug'])->name('blog.show.with.slug');
+Route::get('blogs/all', [BlogController::class, 'getAllBlogs'])->name('blogs');

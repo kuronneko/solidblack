@@ -31,6 +31,11 @@ class BlogController extends Controller
         return Inertia::render('Blog/Index', compact('blogs', 'search'));
     }
 
+    public function getAllBlogs(){
+        return response()->json([
+            'blogs' => Blog::where('status', 2)->orderBy('created_at', 'desc')->skip(request('skip'))->take(request('take'))->get(),
+        ]);
+    }
     /**
      * Show the form for creating a new resource.
      *
