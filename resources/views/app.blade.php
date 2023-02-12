@@ -16,7 +16,7 @@
         @inertiaHead
         <script async charset="utf-8" src="//cdn.embedly.com/widgets/platform.js"></script>
     </head>
-    <body class="font-sans antialiased">
+    <body class="font-sans antialiased dark:bg-zinc-900">
         @inertia
     </body>
 </html>

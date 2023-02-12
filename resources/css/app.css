@@ -9,12 +9,18 @@
  */
 
  :root {
+    --hue-color: 230;
+    --first-color-second: hsl(var(--hue-color), 50%, 50%);
     --ck-color-image-caption-background: hsl(0, 0%, 97%);
     --ck-color-image-caption-text: hsl(0, 0%, 20%);
     --ck-color-table-caption-background: hsl(0, 0%, 97%);
     --ck-color-table-caption-text: hsl(0, 0%, 20%);
     --ck-image-style-spacing: 1.5em;
     --ck-inline-image-style-spacing: calc(var(--ck-image-style-spacing) / 2);
+}
+
+html.dark{
+    --first-color-second: hsl(var(--hue-color), 50%, 70%);
 }
 
 .ck-content blockquote {
@@ -294,7 +300,8 @@
 }
 
 
-a{
-    text-decoration: none !important;
-    cursor: pointer !important;
+.ck-content a {
+    text-decoration: none!important;
+    cursor: pointer!important;
+    color: var(--first-color-second)!important;
 }
