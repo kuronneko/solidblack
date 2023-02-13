@@ -1,6 +1,7 @@
 <template>
     <Head title="Blog" />
-<div class="absolute top-0 right-0 px-6 py-4 sm:block">
+    <div class="mb-3">
+        <div class="absolute top-0 right-0 px-6 py-4 sm:block">
     <Link :href="route('welcome')">
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
         class="w-6 h-6 text-gray-700 dark:text-gray-500">
@@ -26,6 +27,7 @@
         </div>
     </button>
 </div>
+    </div>
 <div class="py-12">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white dark:bg-zinc-800 dark:text-zinc-200 overflow-hidden shadow-xl sm:rounded-lg">

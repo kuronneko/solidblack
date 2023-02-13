@@ -40,7 +40,7 @@
 
         <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
             <div>
-                <p class="text-sm text-gray-700 leading-5">
+                <p class="text-sm text-gray-700 dark:text-gray-400 leading-5">
                     Showing
                     <span class="font-medium" v-text="firstItem"></span>
                     to

@@ -4,7 +4,7 @@
         <template #header>
             <div class="flex">
                 <div>
-                    <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                    <h2 class="font-semibold text-xl leading-tight">
                         Blog Edit
                     </h2>
                 </div>

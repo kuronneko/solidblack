@@ -1,7 +1,9 @@
 <template>
 
     <Head title="Welcome" />
-    <div v-if="canLogin" class="absolute top-0 right-0 px-6 py-4 sm:block">
+
+    <div class="mb-3">
+        <div v-if="canLogin" class="absolute top-0 right-0 px-6 py-4 sm:block">
         <Link v-if="$page.props.user" :href="route('dashboard')" class="text-md text-gray-700 dark:text-gray-500">
         Dashboard</Link>
     </div>
@@ -24,6 +26,7 @@
             </div>
         </button>
     </div>
+    </div>
 
     <div v-for="blog in blogs" :key="blog.id">
         <div class="py-12">
@@ -33,7 +36,7 @@
                         <div v-html="blog.content.slice(0, 2000) + (blog.content.length > 2000 ? '...' : '')"></div>
                         <div class="text-center mt-5">
                             <Link :href="route('blog.show.with.slug', blog)" class="">
-                            <span class="text-gray-700 dark:text-gray-500 text-sm hover:text-gray-500 dark:hover:text-gray-700">Continue
+                            <span class="text-gray-700 dark:text-gray-500 text-sm hover:text-gray-600 dark:hover:text-gray-400">Continue
                                 reading the
                                 article</span>
                             </Link>
