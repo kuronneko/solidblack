@@ -19,7 +19,7 @@
         </template>
 
         <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-zinc-800 overflow-hidden shadow-sm sm:rounded-md">
+            <div class="bg-white dark:bg-zinc-900 overflow-hidden shadow-sm sm:rounded-md">
                 <div class="p-4 sm:px-6">
 
                     <form method="get" class="flex mt-2" @submit.prevent="searchBlog">
@@ -40,8 +40,8 @@
                     <div class="py-3">
                         <div class='overflow-x-auto w-full'>
                             <table
-                                class='mx-auto max-w-7x1 w-full whitespace-nowrap rounded-lg bg-white dark:bg-zinc-800 divide-y divide-gray-300 dark:divide-zinc-900 overflow-hidden'>
-                                <thead class="bg-gray-800 dark:bg-zinc-900">
+                                class='mx-auto max-w-7x1 w-full whitespace-nowrap rounded-lg bg-white dark:bg-zinc-900 divide-y divide-gray-300 dark:divide-zinc-900 overflow-hidden'>
+                                <thead class="bg-gray-800 dark:bg-gray-800">
                                     <tr class="text-gray-200 dark:text-gray-200 text-left">
                                         <th class="font-semibold text-sm uppercase px-6 py-4"> ID </th>
                                         <th class="font-semibold text-sm uppercase px-6 py-4"> Name </th>

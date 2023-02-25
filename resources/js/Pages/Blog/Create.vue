@@ -22,7 +22,7 @@
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+                <div class="bg-white dark:bg-zinc-900 overflow-hidden shadow-sm sm:rounded-md">
                     <div class="p-4 sm:px-6">
                         <form @submit.prevent="submitForm">
                             <div class="container mb-3">
