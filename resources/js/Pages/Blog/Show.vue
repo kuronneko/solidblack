@@ -21,7 +21,7 @@
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white dark:bg-zinc-800 dark:text-zinc-200 overflow-hidden shadow-xl sm:rounded-lg">
+                <div class="bg-white dark:bg-neutral-900 dark:text-neutral-200 overflow-hidden shadow-xl sm:rounded-lg">
                     <div class="p-4 sm:px-6 ck-content">
                         <div v-html="blog.content"></div>
                         <p class="text-xs italic text-right mt-10">Last modified at {{

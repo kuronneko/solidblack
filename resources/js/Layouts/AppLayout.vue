@@ -64,13 +64,13 @@ const logout = () => {
 
 <template>
 
-    <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-zinc-900 dark:border-gray-700">
+    <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-neutral-900 dark:border-neutral-700">
         <div class="px-3 py-3 lg:px-5 lg:pl-3">
             <div class="flex items-center justify-between">
                 <div class="flex items-center justify-start">
                     <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar"
                         aria-controls="logo-sidebar" type="button"
-                        class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-zinc-800 dark:focus:ring-gray-600">
+                        class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-neutral-800 dark:focus:ring-gray-600">
                         <span class="sr-only">Open sidebar</span>
                         <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
                             xmlns="http://www.w3.org/2000/svg">
@@ -98,7 +98,7 @@ const logout = () => {
                         <div>
                             <button aria-expanded="false" data-dropdown-toggle="dropdown-user" type="button"
                                 class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md
-                                text-gray-700 dark:text-gray-500 bg-white  dark:bg-zinc-900 hover:text-gray-500 dark:hover:text-white focus:outline-none">
+                                text-gray-700 dark:text-gray-500 bg-white  dark:bg-neutral-900 hover:text-gray-500 dark:hover:text-white focus:outline-none">
                                 {{ $page.props.user.name }}
 
                                 <svg class="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
@@ -109,7 +109,7 @@ const logout = () => {
                                 </svg>
                             </button>
                         </div>
-                        <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow  dark:bg-zinc-800 dark:divide-zinc-900"
+                        <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow  dark:bg-neutral-800 dark:divide-neutral-900"
                             id="dropdown-user">
                             <div class="px-4 py-3" role="none">
                                 <p class="text-sm font-medium text-gray-700 dark:text-gray-500 truncate " role="none">
@@ -119,13 +119,16 @@ const logout = () => {
                             <ul class="py-1" role="none">
                                 <li>
                                     <Link :href="route('profile.show')"
-                                        class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-500 hover:bg-gray-100  dark:hover:bg-zinc-700 dark:hover:text-white"
+                                        class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-400 hover:bg-gray-100  dark:hover:bg-neutral-700 dark:hover:text-white"
                                         role="menuitem">Profile</Link>
                                 </li>
                                 <li>
-                                    <a href="#"
-                                        class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-500 hover:bg-gray-100  dark:hover:bg-zinc-700 dark:hover:text-white"
-                                        role="menuitem">Sign out</a>
+                                        <!-- Authentication -->
+                                        <form @submit.prevent="logout">
+                                            <DropdownLink as="button">
+                                                Log out
+                                            </DropdownLink>
+                                        </form>
                                 </li>
                             </ul>
                         </div>
@@ -136,20 +139,20 @@ const logout = () => {
     </nav>
 
     <aside id="logo-sidebar"
-        class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-zinc-900 dark:border-gray-700"
+        class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-neutral-900 dark:border-neutral-700"
         aria-label="Sidebar">
-        <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-zinc-900">
+        <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-neutral-900">
             <ul class="space-y-2">
                 <li class="lg:hidden">
                     <Link :href="route('welcome')" :active="route().current('welcome')"
-                        class="flex items-center p-2 text-base font-normal rounded-lg text-gray-700 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-zinc-800 dark:hover:text-white">
+                        class="flex items-center p-2 text-base font-normal rounded-lg text-gray-700 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-neutral-800 dark:hover:text-white">
                         <ApplicationMark class="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
                     <span class="ml-3">Welcome</span>
                     </Link>
                 </li>
                 <li>
                     <Link :href="route('dashboard')" :active="route().current('dashboard')"
-                        class="flex items-center p-2 text-base font-normal rounded-lg text-gray-700 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-zinc-800 dark:hover:text-white">
+                        class="flex items-center p-2 text-base font-normal rounded-lg text-gray-700 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-neutral-800 dark:hover:text-white">
                     <svg aria-hidden="true"
                         class="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                         fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -161,7 +164,7 @@ const logout = () => {
                 </li>
                 <li>
                     <Link :href="route('blog.index')" :active="route().current('dashboard')"
-                        class="flex items-center p-2 text-base font-normal rounded-lg text-gray-700 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-zinc-800 dark:hover:text-white">
+                        class="flex items-center p-2 text-base font-normal rounded-lg text-gray-700 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-neutral-800 dark:hover:text-white">
                     <svg aria-hidden="true"
                         class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                         fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -180,7 +183,7 @@ const logout = () => {
         <div class="mt-14">
             <!-- Page Heading -->
             <header v-if="$slots.header"
-                class="bg-white dark:bg-zinc-900 text-gray-700 dark:text-gray-500 border-b border-gray-200 dark:border-gray-700 shadow">
+                class="bg-white dark:bg-neutral-900 text-gray-700 dark:text-gray-500 border-b border-gray-200 dark:border-neutral-700 shadow">
                 <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                     <slot name="header" />
                 </div>

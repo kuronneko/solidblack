@@ -31,12 +31,12 @@
     <div v-for="blog in blogs" :key="blog.id">
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white dark:bg-zinc-800 dark:text-zinc-200 overflow-hidden shadow-xl sm:rounded-lg">
+                <div class="bg-white dark:bg-neutral-900 dark:text-neutral-200 overflow-hidden shadow-xl sm:rounded-lg">
                     <div class="p-4 sm:px-6 ck-content">
                         <div v-html="blog.content.slice(0, 2000) + (blog.content.length > 2000 ? '...' : '')"></div>
                         <div class="text-center mt-5">
                             <Link :href="route('blog.show.with.slug', blog)" class="">
-                            <span class="text-gray-700 dark:text-gray-500 text-sm hover:text-gray-600 dark:hover:text-gray-400">Continue
+                            <span class="text-gray-700 hover:text-gray-600 dark:text-indigo-300 text-sm dark:hover:text-indigo-400">Continue
                                 reading the
                                 article</span>
                             </Link>

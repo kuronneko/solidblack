@@ -15,7 +15,7 @@
         @vite('resources/js/app.js')
         @inertiaHead
     </head>
-    <body class="font-sans antialiased dark:bg-zinc-900">
+    <body class="font-sans antialiased bg-gray-100 dark:bg-neutral-800">
         <script async charset="utf-8" src="//cdn.embedly.com/widgets/platform.js"></script>
         @inertia
     </body>

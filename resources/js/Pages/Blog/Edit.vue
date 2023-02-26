@@ -22,7 +22,7 @@
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white dark:bg-zinc-900 overflow-hidden shadow-xl sm:rounded-lg">
+                <div class="bg-white dark:bg-neutral-900 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-4 sm:px-6">
                         <form @submit.prevent="submitForm">
                             <div class="container mb-3">
@@ -35,7 +35,7 @@
                                     <div>
                                         <InputLabel for="status" value="Status" />
                                         <select v-model="form.status"
-                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500">
+                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5 dark:bg-neutral-800 dark:border-neutral-800 dark:placeholder-neutral-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500">
                                             <option v-for="option in options" :key="option.value" :value="option.value">
                                                 {{ option.text }}
                                             </option>
@@ -47,11 +47,11 @@
                                 :class="v$.form.content.$error === true ? 'border-gray-300 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50 rounded-md shadow-sm' : ''">
                             </ckeditor>
                             <PrimaryButton v-if="isLoading === false" type="submit" id="submitBtn"
-                                class="w-full rounded-none justify-center">
+                                class="w-full rounded-none justify-center dark:bg-neutral-800">
                                 Edit
                             </PrimaryButton>
                             <PrimaryButton v-if="isLoading === true" :disabled="isLoading === true" type="submit"
-                                id="submitBtn" class="w-full rounded-none justify-center">
+                                id="submitBtn" class="w-full rounded-none justify-center dark:bg-neutral-800">
                                 Editing
                                 <svg class="inline ml-2 w-3 h-3 text-gray-200 animate-spin dark:text-gray-600 fill-gray-600 dark:fill-gray-300"
                                     viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -6,12 +6,21 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
+import { onMounted } from 'vue'
 
 const props = defineProps({
     email: String,
     token: String,
 });
-
+onMounted(() => {
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark')
+        localStorage.theme = "dark";
+    } else {
+        document.documentElement.classList.remove('dark')
+        localStorage.theme = "light";
+    }
+})
 const form = useForm({
     token: props.token,
     email: props.email,

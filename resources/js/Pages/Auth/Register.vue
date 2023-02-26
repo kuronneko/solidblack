@@ -7,6 +7,7 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
+import { onMounted } from 'vue'
 
 const form = useForm({
     name: '',
@@ -15,7 +16,15 @@ const form = useForm({
     password_confirmation: '',
     terms: false,
 });
-
+onMounted(() => {
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark')
+        localStorage.theme = "dark";
+    } else {
+        document.documentElement.classList.remove('dark')
+        localStorage.theme = "light";
+    }
+})
 const submit = () => {
     form.post(route('register'), {
         onFinish: () => form.reset('password', 'password_confirmation'),

@@ -7,12 +7,21 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
+import { onMounted } from 'vue'
 
 defineProps({
     canResetPassword: Boolean,
     status: String,
 });
-
+onMounted(() => {
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark')
+        localStorage.theme = "dark";
+    } else {
+        document.documentElement.classList.remove('dark')
+        localStorage.theme = "light";
+    }
+})
 const form = useForm({
     email: '',
     password: '',
@@ -76,7 +85,7 @@ const submit = () => {
             </div>
 
             <div class="flex items-center justify-end mt-4">
-                <Link v-if="canResetPassword" :href="route('password.request')" class="underline text-sm text-gray-600 hover:text-gray-900">
+                <Link v-if="canResetPassword" :href="route('password.request')" class="underline text-sm text-gray-600 hover:text-gray-900 dark:hover:text-gray-200">
                     Forgot your password?
                 </Link>
 
