@@ -112,10 +112,10 @@ export default {
                 },
                 ckfinder: {
                     // uploadUrl: '/image-upload?_token='+$("input[name='_token']").val(),
-                    uploadUrl: '/blog/upload?blog=' + this.blog.id,
-                    headers: {
+                    uploadUrl: '/blog/upload?blog=' + this.blog.id + '&_token=' + document.querySelector("input[name='_token']").value,
+/*                     headers: {
                         'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content
-                    }
+                    } */
                 },
             },
         };
