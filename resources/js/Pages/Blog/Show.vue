@@ -23,9 +23,10 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white dark:bg-neutral-900 dark:text-neutral-200 overflow-hidden shadow-xl sm:rounded-lg">
                     <div class="p-4 sm:px-6 ck-content">
+                        <h2>{{ blog.name }}</h2>
                         <div v-html="blog.content"></div>
-                        <p class="text-xs italic text-right mt-10">Last modified at {{
-                            moment(blog.updated_at).format('MMMM Do YYYY, h:mm:ss a')
+                        <p class="text-xs italic text-right mt-10">Published at {{
+                            moment(blog.published_at).format('MMMM Do YYYY, h:mm:ss a')
                         }}</p>
                     </div>
                 </div>

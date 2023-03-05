@@ -26,13 +26,21 @@
                     <div class="p-4 sm:px-6">
                         <form @submit.prevent="submitForm">
                             <div class="container mb-3">
-                                <div class="grid sm:grid-cols-2 grid-cols-1">
-                                    <div class="mr-1">
-                                        <InputLabel for="name" value="Name" />
+                                <div class="grid sm:grid-cols-1 grid-cols-1">
+                                    <div class="flex items-end justify-end mb-2">
+                                        <label for="default-checkbox"
+                                            class="mr-2 text-sm font-medium text-gray-900 dark:text-gray-300">Highlight</label>
+                                        <input id="default-checkbox" type="checkbox" v-model="form.highlight" :checked="form.highlight === 1"
+                                            class="w-4 h-4 text-neutral-600 bg-gray-100 border-gray-300 rounded focus:ring-neutral-500 dark:focus:ring-neutral-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-neutral-700 dark:border-gray-600">
+                                    </div>
+                                </div>
+                                <div class="grid sm:grid-cols-3 grid-cols-1">
+                                    <div class="md:mr-1 lg:mr-1 mb-2">
+                                        <InputLabel for="name" value="Name/Title" />
                                         <TextInput v-model="form.name" type="text" class="block w-full"
                                             :class="v$.form.name.$error === true ? 'border-gray-300 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50 rounded-md shadow-sm' : ''" />
                                     </div>
-                                    <div>
+                                    <div class="md:mr-1 lg:mr-1 mb-2">
                                         <InputLabel for="status" value="Status" />
                                         <select v-model="form.status"
                                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5 dark:bg-neutral-800 dark:border-neutral-800 dark:placeholder-neutral-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500">
@@ -40,6 +48,12 @@
                                                 {{ option.text }}
                                             </option>
                                         </select>
+                                    </div>
+                                    <div class="md:mr-1 lg:mr-1 mb-2">
+                                        <InputLabel for="date" value="Date" />
+                                        <input type="datetime-local" v-model="form.date"
+                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5 dark:bg-neutral-800 dark:border-neutral-800 dark:placeholder-neutral-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500"
+                                            id="date" name="date" placeholder="DD/MM/AAAA">
                                     </div>
                                 </div>
                             </div>
@@ -95,7 +109,9 @@ export default {
             form: {
                 name: this.blog.name,
                 content: this.blog.content,
-                status: this.blog.status
+                status: this.blog.status,
+                date: new Date(this.blog.published_at).toISOString().slice(0, 16),
+                highlight: null,
             },
             options: [
                 { text: 'Inactive', value: 1 },
@@ -120,11 +136,20 @@ export default {
             },
         };
     },
+/*     watch: {
+        'blog.highlight': function (newVal) {
+            this.form.highlight = newVal;
+        },
+    }, */
+    mounted() {
+        this.form.highlight = this.blog.highlight; // set initial value
+    },
     validations() {
         return {
             form: {
                 name: { required, $autoDirty: true },
                 content: { required, $autoDirty: true },
+                date: { required, $autoDirty: true },
             }
         }
     },
@@ -151,10 +176,10 @@ export default {
                             title: 'Blog edited'
                         })
                         this.isLoading = false;
-                        Inertia.post(route("blog.update", { 'blog': this.blog.id, 'name': this.form.name, 'content': this.form.content, 'status': this.form.status }),
-                            {
-                                _method: 'put',
-                            });
+                        Inertia.post(route("blog.update", { 'blog': this.blog.id }), {
+                            ...this.form,
+                            _method: 'put',
+                        });
                         //Inertia.post(route("blog.update", { 'blog': this.blog, 'title': this.form.title, 'content': this.form.content }));
                     }, 1000)
                 } else {

@@ -44,8 +44,10 @@
                                 <thead class="bg-gray-800 dark:bg-neutral-800">
                                     <tr class="text-gray-200 dark:text-gray-200 text-left">
                                         <th class="font-semibold text-sm uppercase px-6 py-4"> ID </th>
-                                        <th class="font-semibold text-sm uppercase px-6 py-4"> Name </th>
-                                        <th class="font-semibold text-sm uppercase px-6 py-4"> Date/Time </th>
+                                        <th class="font-semibold text-sm uppercase px-6 py-4"> Name/Title </th>
+                                        <th class="font-semibold text-sm uppercase px-6 py-4"> Created at </th>
+                                        <th class="font-semibold text-sm uppercase px-6 py-4"> Published at </th>
+                                        <th class="font-semibold text-sm uppercase px-6 py-4"> Highlight </th>
                                         <th class="font-semibold text-sm uppercase px-6 py-4"> Status </th>
                                         <th class="font-semibold text-sm uppercase px-6 py-4"> Options</th>
                                     </tr>
@@ -61,10 +63,21 @@
                                         <td class="px-6 py-4">
                                             <div class="flex items-center space-x-3">
                                                 <div>
-                                                    <p> {{ moment(blog.updated_at).format('MMMM Do YYYY, h:mm:ss a') }}
+                                                    <p> {{ moment(blog.created_at).format('MMMM Do YYYY, h:mm:ss a') }}
                                                     </p>
                                                 </div>
                                             </div>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <div class="flex items-center space-x-3">
+                                                <div>
+                                                    <p> {{ moment(blog.published_at).format('MMMM Do YYYY, h:mm:ss a') }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <p class=""> {{ blog.highlight }} </p>
                                         </td>
                                         <td class="px-6 py-4">
 

@@ -1,5 +1,4 @@
 <template>
-
     <AppLayout title="Blog - Create">
         <template #header>
             <div class="flex">
@@ -12,8 +11,7 @@
                     <Link :href="route('blog.index')">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-6 h-6">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
                     </svg>
                     </Link>
                 </div>
@@ -26,13 +24,21 @@
                     <div class="p-4 sm:px-6">
                         <form @submit.prevent="submitForm">
                             <div class="container mb-3">
-                                <div class="grid sm:grid-cols-2 grid-cols-1">
-                                    <div class="mr-1">
-                                        <InputLabel for="name" value="Name" />
+                                <div class="grid sm:grid-cols-1 grid-cols-1">
+                                    <div class="flex items-end justify-end mb-2">
+                                        <label for="default-checkbox"
+                                            class="mr-2 text-sm font-medium text-gray-900 dark:text-gray-300">Highlight</label>
+                                        <input id="default-checkbox" type="checkbox" value="" v-model="form.highlight"
+                                            class="w-4 h-4 text-neutral-600 bg-gray-100 border-gray-300 rounded focus:ring-neutral-500 dark:focus:ring-neutral-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-neutral-700 dark:border-gray-600">
+                                    </div>
+                                </div>
+                                <div class="grid sm:grid-cols-3 grid-cols-1">
+                                    <div class="md:mr-1 lg:mr-1 mb-2">
+                                        <InputLabel for="name" value="Name/Title" />
                                         <TextInput v-model="form.name" type="text" class="block w-full"
                                             :class="v$.form.name.$error === true ? 'border-gray-300 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50 rounded-md shadow-sm' : ''" />
                                     </div>
-                                    <div>
+                                    <div class="md:mr-1 lg:mr-1 mb-2">
                                         <InputLabel for="status" value="Status" />
                                         <select v-model="form.status"
                                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5 dark:bg-neutral-800 dark:border-neutral-800 dark:placeholder-neutral-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500">
@@ -40,6 +46,12 @@
                                                 {{ option.text }}
                                             </option>
                                         </select>
+                                    </div>
+                                    <div class="md:mr-1 lg:mr-1 mb-2">
+                                        <InputLabel for="date" value="Date" />
+                                        <input type="datetime-local" v-model="form.date"
+                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5 dark:bg-neutral-800 dark:border-neutral-800 dark:placeholder-neutral-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500"
+                                            id="date" name="date" placeholder="DD/MM/AAAA">
                                     </div>
                                 </div>
                             </div>
@@ -92,10 +104,13 @@ export default {
     },
     data() {
         return {
+            //minDate: new Date().toISOString().slice(0, 16),
             form: {
                 name: '',
                 content: '',
-                status: 1,
+                status: 2,
+                highlight: false,
+                date: '',
             },
             options: [
                 { text: 'Inactive', value: 1 },
@@ -115,9 +130,9 @@ export default {
                     // uploadUrl: '/image-upload?_token='+$("input[name='_token']").val(),
                     // uploadUrl: '/image-upload?_token='document.head.querySelector('meta[name="csrf-token"]').content,  TRY WITH THIS
                     uploadUrl: '/blog/upload?blog=' + this.blog.id + '&_token=' + document.querySelector("input[name='_token']").value,
- /*                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector("input[name='_token']").value
-                    } */
+                    /*                    headers: {
+                                           'X-CSRF-TOKEN': document.querySelector("input[name='_token']").value
+                                       } */
                 },
             },
         };
@@ -147,6 +162,7 @@ export default {
             form: {
                 name: { required, $autoDirty: true },
                 content: { required, $autoDirty: true },
+                date: { required, $autoDirty: true },
             }
         }
     },
@@ -173,10 +189,10 @@ export default {
                             title: 'Blog created'
                         })
                         this.isLoading = false;
-                        Inertia.post(route("blog.update", { 'blog': this.blog.id, 'name': this.form.name, 'content': this.form.content, 'status': this.form.status }),
-                            {
-                                _method: 'put',
-                            });
+                        Inertia.post(route("blog.update", { 'blog': this.blog.id }), {
+                            ...this.form,
+                            _method: 'put',
+                        });
                     }, 1000)
                 } else {
                     this.Toast().fire({

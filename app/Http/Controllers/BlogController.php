@@ -33,7 +33,7 @@ class BlogController extends Controller
 
     public function getAllBlogs(){
         return response()->json([
-            'blogs' => Blog::where('status', 2)->orderBy('created_at', 'desc')->skip(request('skip'))->take(request('take'))->get(),
+            'blogs' => Blog::where('status', 2)->orderBy('published_at', 'desc')->skip(request('skip'))->take(request('take'))->get(),
         ]);
     }
     /**
@@ -163,10 +163,14 @@ class BlogController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function showWithSlug(Blog $blog)
+    public function showWithSlug(Blog $blog, $slug)
     {
         //$blog = Blog::where('slug', request('slug'))->first();
-        return Inertia::render('Blog', compact('blog'));
+        if(Str::slug($blog->slug , "-") != $slug){
+            abort(404);
+        }else{
+            return Inertia::render('Blog', compact('blog'));
+        }
     }
     /**
      * Show the form for editing the specified resource.
@@ -212,6 +216,8 @@ class BlogController extends Controller
             'content' => $request->content,
             'slug' => Str::slug($request->name),
             'status' => $request->status,
+            'published_at' => $request->date,
+            'highlight' => $request->highlight,
         ]);
         return redirect()->route('blog.index');
     }
