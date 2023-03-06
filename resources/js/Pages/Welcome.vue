@@ -33,7 +33,7 @@
                 <div class="bg-white dark:bg-neutral-900 dark:text-neutral-200 overflow-hidden shadow-xl sm:rounded-lg">
                     <div class="p-4 sm:px-6 ck-content">
                         <h2>{{ blog.name }}</h2>
-                        <!--                         <div v-html="blog.content.slice(0, 2000) + (blog.content.length > 2000 ? '...' : '')"></div> -->
+                        <div v-html="blog.content.slice(0, 2000) + (blog.content.length > 2000 ? '...' : '')"></div>
                         <div class="text-center mt-5">
                             <Link :href="route('blog.show.with.slug', [blog.id, blog.slug])" class="">
                             <span
@@ -94,7 +94,7 @@ export default {
         return {
             blogs: [],
             moment: moment,
-            start: 3,
+            start: 6,
             stop: false,
             isLoading: false,
             style: localStorage.theme,

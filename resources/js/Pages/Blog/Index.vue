@@ -58,7 +58,7 @@
                                             <p class=""> {{ blog.id }} </p>
                                         </td>
                                         <td class="px-6 py-4">
-                                            <p class=""> {{ blog.name }} </p>
+                                            <p class="truncate-words text-ellipsis overflow-hidden w-20"> {{ blog.name }} </p>
                                         </td>
                                         <td class="px-6 py-4">
                                             <div class="flex items-center space-x-3">
@@ -77,17 +77,45 @@
                                             </div>
                                         </td>
                                         <td class="px-6 py-4">
-                                            <p class=""> {{ blog.highlight }} </p>
+                                                <div preserve-scroll v-if="blog.highlight === 0"
+                                                    @click.once="toggleHighlight(blog)" for="default-toggle"
+                                                    class="inline-flex relative items-center cursor-pointer">
+                                                    <input type="checkbox" value="" id="default-toggle"
+                                                        class="sr-only peer">
+                                                    <div
+                                                        class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-gray-300 dark:peer-focus:ring-neutral-800
+                                                         rounded-full peer dark:bg-neutral-800 peer-checked:after:translate-x-full
+                                                          peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px]
+                                                           after:bg-white after:border-gray-300 dark:after:bg-neutral-700 dark:after:border-neutral-700 after:border after:rounded-full after:h-5 after:w-5 after:transition-all
+                                                            dark:border-neutral-600 peer-checked:bg-gray-800 dark:peer-checked:bg-neutral-700">
+                                                    </div>
+                                                </div>
+                                                <div preserve-scroll v-else
+                                                    @click.once="toggleHighlight(blog)" for="checked-toggle"
+                                                    class="inline-flex relative items-center cursor-pointer">
+                                                    <input type="checkbox" value="" id="checked-toggle"
+                                                        class="sr-only peer" checked>
+                                                    <div
+                                                        class="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-gray-300 dark:peer-focus:ring-neutral-800
+                                                         dark:bg-neutral-800 peer-checked:after:translate-x-full
+                                                          peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px]
+                                                           after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all
+                                                            dark:border-neutral-600 peer-checked:bg-gray-800 dark:peer-checked:bg-neutral-700">
+                                                    </div>
+                                                </div>
                                         </td>
                                         <td class="px-6 py-4">
-
                                                 <div preserve-scroll v-if="blog.status === 1"
                                                     @click.once="toggleStatus(blog)" for="default-toggle"
                                                     class="inline-flex relative items-center cursor-pointer">
                                                     <input type="checkbox" value="" id="default-toggle"
                                                         class="sr-only peer">
                                                     <div
-                                                        class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-gray-300 dark:peer-focus:ring-gray-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-neutral-600 peer-checked:bg-gray-600">
+                                                        class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-gray-300 dark:peer-focus:ring-neutral-800
+                                                         rounded-full peer dark:bg-neutral-800 peer-checked:after:translate-x-full
+                                                          peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px]
+                                                           after:bg-white after:border-gray-300 dark:after:bg-neutral-700 dark:after:border-neutral-700 after:border after:rounded-full after:h-5 after:w-5 after:transition-all
+                                                            dark:border-neutral-600 peer-checked:bg-gray-800 dark:peer-checked:bg-neutral-700">
                                                     </div>
                                                 </div>
                                                 <div preserve-scroll v-else
@@ -96,10 +124,13 @@
                                                     <input type="checkbox" value="" id="checked-toggle"
                                                         class="sr-only peer" checked>
                                                     <div
-                                                        class="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-gray-300 dark:peer-focus:ring-gray-800 dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-neutral-600 peer-checked:bg-gray-600">
+                                                        class="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-gray-300 dark:peer-focus:ring-neutral-800
+                                                         dark:bg-neutral-800 peer-checked:after:translate-x-full
+                                                          peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px]
+                                                           after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all
+                                                            dark:border-neutral-600 peer-checked:bg-gray-800 dark:peer-checked:bg-neutral-700">
                                                     </div>
                                                 </div>
-
                                         </td>
                                         <td class="px-6 py-4">
                                             <!--                                             <jet-primary-button>
@@ -266,6 +297,26 @@ export default {
                     this.Toast().fire({
                         icon: 'success',
                         title: 'Blog inactive'
+                    })
+                }
+            }, 500)
+        },
+        toggleHighlight: function (blog) {
+            setTimeout(() => {
+                Inertia.post(route("blog.toggle.highlight", blog),
+                    {
+                        _method: 'put',
+                    });
+                if (blog.highlight == 0) {
+                    //message is inverse because "blog that come here is the same previious edit"
+                    this.Toast().fire({
+                        icon: 'success',
+                        title: 'Blog highlight'
+                    })
+                } else {
+                    this.Toast().fire({
+                        icon: 'success',
+                        title: 'Blog unhighlight'
                     })
                 }
             }, 500)

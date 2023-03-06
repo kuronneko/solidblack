@@ -38,6 +38,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     Route::resource('blog', BlogController::class);
     Route::post('blog/upload', [BlogController::class, 'upload'])->name('blog.upload');
     Route::put('blog/toggle-status/{blog}', [BlogController::class, 'toggleStatus'])->name('blog.toggle.status');
+    Route::put('blog/toggle-highlight/{blog}', [BlogController::class, 'toggleHighlight'])->name('blog.toggle.highlight');
 });
 Route::get('{blog}-{slug}', [BlogController::class, 'showWithSlug'])->name('blog.show.with.slug');
 Route::get('blogs/all', [BlogController::class, 'getAllBlogs'])->name('blogs');
