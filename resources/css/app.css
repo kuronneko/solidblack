@@ -21,6 +21,7 @@
     --text-area-color:hsl(0, 0%, 100%);
     --text-area-border-color:hsl(216, 5%, 81%);
     --special-swal-color: hsl(0, 0%, 100%);
+    --pre-area-color:hsl(0, 0%, 92%);
 }
 
 html.dark{
@@ -28,6 +29,7 @@ html.dark{
     --text-area-color: 	hsl(0, 0%, 9%);
     --text-area-border-color:hsl(240, 4%, 16%);
     --special-swal-color: hsl(0, 0%, 15%);
+    --pre-area-color: 	hsl(0, 1%, 13%);
 
     --first-color-second: hsl(var(--hue-color), 50%, 70%);
 
@@ -430,6 +432,16 @@ ck-editor__main{
     border: white!important;
 }
 
+code{
+    background-color: var(--pre-area-color)!important;
+    color: var(--text-color)!important;
+}
+
+pre{
+    background-color: var(--pre-area-color)!important;
+    border: 0px!important;
+}
+
 .swal2-modal{
     background-color: var(--special-swal-color)!important;
     color: var(--text-color)!important;
@@ -439,3 +451,5 @@ ck-editor__main{
     background-color: var(--special-swal-color)!important;
     color: var(--text-color)!important;
 }
+
+
