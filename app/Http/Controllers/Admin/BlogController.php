@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Models\Blog;
 use Inertia\Inertia;
@@ -13,6 +13,7 @@ use App\Services\BlogService;
 use App\Services\ImageService;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManagerStatic;
+use App\Http\Controllers\Controller;
 
 class BlogController extends Controller
 {
@@ -198,31 +199,4 @@ class BlogController extends Controller
         }
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function getAllBlogs()
-    {
-        return response()->json([
-            'blogs' => Blog::where('status', 2)->orderBy('published_at', 'desc')->skip(request('skip'))->take(request('take'))->get(),
-        ]);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function showWithSlug(Blog $blog, $slug)
-    {
-        //$blog = Blog::where('slug', request('slug'))->first();
-        if (Str::slug($blog->slug, "-") != $slug) {
-            abort(404);
-        } else {
-            return Inertia::render('Blog', compact('blog'));
-        }
-    }
 }

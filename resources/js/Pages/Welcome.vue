@@ -27,7 +27,7 @@
         </div>
     </div>
 
-    <div class="pt-12" id="blogs-container">
+    <div class="pt-12 mb-6" id="blogs-container">
         <div v-for="blog in blogs" :key="blog.id">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 pb-6">
                 <div class="bg-white dark:bg-neutral-900 dark:text-neutral-200 overflow-hidden shadow-xl sm:rounded-lg">
@@ -150,7 +150,7 @@ export default {
             }
         },
         getInitialBlogs() {
-            this.axios.get(`blogs/all?skip=${0}&take=${this.start}`).then((response) => {
+            this.axios.get(`blog/all?skip=${0}&take=${this.start}`).then((response) => {
                 this.blogs = response.data.blogs;
             });
         },
@@ -163,7 +163,7 @@ export default {
                 if (bottomOfWindow) {
                     if (this.stop == false) {
                         setTimeout(() => {
-                            axios.get(`blogs/all?skip=${this.start}&take=${1}`).then(response => {
+                            axios.get(`blog/all?skip=${this.start}&take=${1}`).then(response => {
                                 //this.blogs = [];
                                 this.blogs.push(...response.data.blogs);
                                 this.start = this.start + 1;

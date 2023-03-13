@@ -23,7 +23,7 @@
                 <div class="bg-white dark:bg-neutral-900 overflow-hidden shadow-sm sm:rounded-md">
                     <div class="p-4 sm:px-6">
                         <form @submit.prevent="submitForm">
-                            <div class="container mb-3">
+                            <div class="container mb-1">
                                 <div class="grid sm:grid-cols-1 grid-cols-1">
                                     <div class="flex items-end justify-end mb-2">
                                         <label for="default-checkbox"
