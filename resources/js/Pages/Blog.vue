@@ -1,5 +1,4 @@
 <template>
-    <Head title="Blog" />
     <div class="mb-3">
         <div class="absolute top-0 right-0 px-6 py-4 sm:block">
     <Link :href="route('welcome')">
@@ -115,7 +114,6 @@ components: {
     InputLabel,
     Link,
     Fancybox,
-    Head,
 },
 methods: {
     toggle() {
