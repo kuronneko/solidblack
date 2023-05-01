@@ -9,13 +9,13 @@
 
         <!-- Fonts -->
         <link rel="stylesheet" href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap">
-
+        <link href="https://fonts.bunny.net/css?family=space-mono:400,400i,700,700i" rel="stylesheet" />
         <!-- Scripts -->
         @routes
         @vite('resources/js/app.js')
         @inertiaHead
     </head>
-    <body class="font-sans antialiased bg-gray-100 dark:bg-neutral-800">
+    <body class="font-mono antialiased bg-gray-100 dark:bg-neutral-800">
         <script async charset="utf-8" src="//cdn.embedly.com/widgets/platform.js"></script>
         @inertia
     </body>
