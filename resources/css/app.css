@@ -9,8 +9,9 @@
  */
 
  :root {
-    --hue-color: 230;
-    --first-color-second: hsl(var(--hue-color), 50%, 50%);
+    --hue-color: 0;
+
+    --first-color-second: hsl(224, 76%, 48%);
     --ck-color-image-caption-background: hsl(0, 0%, 97%);
     --ck-color-image-caption-text: hsl(0, 0%, 20%);
     --ck-color-table-caption-background: hsl(0, 0%, 97%);
@@ -31,7 +32,7 @@ html.dark{
     --special-swal-color: hsl(0, 0%, 15%);
     --pre-area-color: 	hsl(0, 1%, 13%);
 
-    --first-color-second: hsl(var(--hue-color), 94%, 82%);
+    --first-color-second: hsl(0, 84%, 60%);
 
         /* Overrides the border radius setting in the theme. */
         --ck-border-radius: 4px;

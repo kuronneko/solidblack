@@ -21,7 +21,7 @@
         </template>
 
         <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white dark:bg-neutral-900 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-4 sm:px-6">
                         <form @submit.prevent="submitForm">
@@ -128,7 +128,7 @@ export default {
                 },
                 ckfinder: {
                     // uploadUrl: '/image-upload?_token='+$("input[name='_token']").val(),
-                    uploadUrl: '/blog/upload?blog=' + this.blog.id + '&_token=' + document.querySelector("input[name='_token']").value,
+                    uploadUrl: '/admin/blog/upload?blog=' + this.blog.id + '&_token=' + document.querySelector("input[name='_token']").value,
 /*                     headers: {
                         'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content
                     } */
