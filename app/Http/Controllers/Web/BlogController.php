@@ -25,7 +25,7 @@ class BlogController extends Controller
     public function getAllBlogs()
     {
         return response()->json([
-            'blogs' => Blog::where('status', 2)->orderBy('published_at', 'desc')->skip(request('skip'))->take(request('take'))->get(),
+            'blogs' => Blog::where('status', 2)->orderBy('created_at', 'desc')->skip(request('skip'))->take(request('take'))->get(),
         ]);
     }
 
