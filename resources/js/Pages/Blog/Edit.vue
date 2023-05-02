@@ -5,7 +5,7 @@
             <div class="flex">
                 <div>
                     <h2 class="font-semibold text-xl leading-tight">
-                        Blog Edit
+                        Editing this blog
                     </h2>
                 </div>
                 <div class="ml-auto">
@@ -20,7 +20,7 @@
             </div>
         </template>
 
-        <div class="py-12">
+        <div class="py-7">
             <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white dark:bg-neutral-900 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-4 sm:px-6">

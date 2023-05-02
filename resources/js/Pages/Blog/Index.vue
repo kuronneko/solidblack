@@ -4,7 +4,7 @@
             <div class="flex">
                 <div>
                     <h2 class="font-semibold text-xl leading-tight">
-                        Blog
+                        My blogs
                     </h2>
                 </div>
                 <div class="ml-auto">
@@ -18,7 +18,7 @@
             </div>
         </template>
 
-        <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto py-7 sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-neutral-900 overflow-hidden shadow-sm sm:rounded-md">
                 <div class="p-4 sm:px-6">
 
