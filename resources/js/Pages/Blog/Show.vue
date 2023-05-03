@@ -25,7 +25,7 @@
                     <div class="p-4 sm:px-6 ck-content">
                         <h2>{{ blog.name }}</h2>
                         <div v-html="blog.content"></div>
-                        <p class="text-xs italic text-right mt-10">Published at {{
+                        <p class="text-xs italic text-right mt-10 text-neutral-600 hover:text-blue-800 dark:hover:text-red-600">Published at {{
                             moment(blog.published_at).format('MMMM Do YYYY, h:mm:ss a')
                         }}</p>
                     </div>

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Request;
 use App\Http\Controllers\Admin\BlogController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Web\BlogController as WebBlogController;
 use Stevebauman\Location\Facades\Location;
 
@@ -26,9 +27,9 @@ use Stevebauman\Location\Facades\Location;
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',])->group(function () {
     Route::prefix('admin')->group(function () {
         Route::controller(BlogController::class)->group(function () {
-            Route::get('/dashboard', function () {
-                return Inertia::render('Dashboard');
-            })->name('dashboard');
+
+            Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
             Route::resource('blog', BlogController::class);
             Route::post('blog/upload', [BlogController::class, 'upload'])->name('blog.upload');
             Route::put('blog/toggle-status/{blog}', [BlogController::class, 'toggleStatus'])->name('blog.toggle.status');

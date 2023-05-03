@@ -28,15 +28,18 @@
   </div>
 </div>
 
-
+<div class="flex items-center justify-center">
+        <div class="mt-14 rounded-lg dark:text-white" id="logo-container">
+        Rev 0.10101110111111
+        </div>
+    </div>
     <div class="flex items-center justify-center">
-  <div class="pt-12" id="logo-container">
-  <img src="/img/orin1.png" alt="" class="w-80 h-auto">
-  </div>
-</div>
+        <div class="px-5 py-5 rounded-lg" id="logo-container">
+        <img :src="randomImage" alt="" class="w-80 h-auto">
+        </div>
+    </div>
 
-
-    <div class="pt-12 mb-6" id="blogs-container">
+    <div class="pt-6 mb-6" id="blogs-container">
         <div v-for="blog in blogs" :key="blog.id">
             <div class="max-w-4xl mx-auto sm:px-6 lg:px-8 pb-6">
                 <div class="bg-white dark:bg-neutral-900 dark:text-neutral-200 overflow-hidden shadow-xl sm:rounded-lg">
@@ -101,6 +104,10 @@ export default {
     },
     data() {
         return {
+            images: [
+        '/img/orin1.png',
+        '/img/orin2.png',
+      ],
             blogs: [],
             moment: moment,
             start: 6,
@@ -146,6 +153,12 @@ export default {
         Fancybox,
         Head,
     },
+    computed: {
+    randomImage() {
+      const index = Math.floor(Math.random() * this.images.length)
+      return this.images[index]
+    }
+  },
     methods: {
         toggle() {
             if (localStorage.theme === "dark") {
