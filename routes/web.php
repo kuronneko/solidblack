@@ -29,6 +29,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
         Route::controller(BlogController::class)->group(function () {
 
             Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+            Route::delete('dashboard/clear-blogs', [DashboardController::class, 'clearBlogs'])->name('dashboard.clear.blogs');
+            Route::get('dashboard/get-unposted-blogs', [DashboardController::class, 'getUnpostedBlogs'])->name('dashboard.get.unposted.blogs');
 
             Route::resource('blog', BlogController::class);
             Route::post('blog/upload', [BlogController::class, 'upload'])->name('blog.upload');
