@@ -2,6 +2,8 @@
 import AppLayout from '@/Layouts/AppLayout.vue';
 import Welcome from '@/Components/Welcome.vue';
 import ClearBlogs from '@/Pages/Dashboard/ClearBlogs.vue';
+import UploadLogo from '@/Pages/Dashboard/UploadLogo.vue';
+import SectionBorder from '@/Components/SectionBorder.vue';
 </script>
 
 <template>
@@ -16,6 +18,10 @@ import ClearBlogs from '@/Pages/Dashboard/ClearBlogs.vue';
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="">
                     <ClearBlogs></ClearBlogs>
+
+                    <SectionBorder />
+
+                    <UploadLogo></UploadLogo>
                 </div>
             </div>
         </div>

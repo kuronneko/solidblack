@@ -454,3 +454,6 @@ pre{
 }
 
 
+input[type="file"]::-webkit-file-upload-button::before {
+    content: "Choose File";
+}
