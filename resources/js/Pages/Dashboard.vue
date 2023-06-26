@@ -4,6 +4,7 @@ import Welcome from '@/Components/Welcome.vue';
 import ClearBlogs from '@/Pages/Dashboard/ClearBlogs.vue';
 import UploadLogo from '@/Pages/Dashboard/UploadLogo.vue';
 import SectionBorder from '@/Components/SectionBorder.vue';
+import StatusUpdate from './Dashboard/StatusUpdate.vue';
 </script>
 
 <template>
@@ -22,6 +23,10 @@ import SectionBorder from '@/Components/SectionBorder.vue';
                     <SectionBorder />
 
                     <UploadLogo></UploadLogo>
+
+                    <SectionBorder />
+
+                    <StatusUpdate></StatusUpdate>
                 </div>
             </div>
         </div>

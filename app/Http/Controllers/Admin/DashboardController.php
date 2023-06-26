@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Blog;
 use Inertia\Inertia;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
@@ -90,14 +91,19 @@ class DashboardController extends Controller
     {
         try {
             $blogs = Blog::where('status', 0)->get();
+
             foreach ($blogs as $blog) {
                 $folderPath = 'public/images/' . $blog->id;
+
                 if (Storage::exists($folderPath)) {  //check if folder exists
                     Storage::deleteDirectory($folderPath);
                 }
+
                 $blog->delete();
             }
+
             $blogs->each->delete();
+
             return redirect()->back();
             //return redirect()->back()->with('message', 'Unposted Blogs Cleared');
         } catch (\Throwable $th) {
@@ -108,9 +114,31 @@ class DashboardController extends Controller
     public function getUnpostedBlogs(){
         try {
             $blogs = Blog::where('status', 0)->get();
+
             $count = $blogs->count();
 
             return response()->json(['count' => $count]);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => $th->getMessage()]);
+        }
+    }
+
+    public function getStatus(){
+        try {
+            return response()->json(['status' => Setting::first()->status]);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => $th->getMessage()]);
+        }
+    }
+
+    public function updateStatus(){
+        try {
+            $setting = Setting::first();
+            $setting->status = request('status');
+            $setting->update();
+
+            return redirect()->back();
+
         } catch (\Throwable $th) {
             return response()->json(['error' => $th->getMessage()]);
         }

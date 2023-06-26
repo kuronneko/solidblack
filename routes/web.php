@@ -27,15 +27,18 @@ use Stevebauman\Location\Facades\Location;
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',])->group(function () {
     Route::prefix('admin')->group(function () {
         Route::controller(BlogController::class)->group(function () {
-
-            Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
-            Route::delete('dashboard/clear-blogs', [DashboardController::class, 'clearBlogs'])->name('dashboard.clear.blogs');
-            Route::get('dashboard/get-unposted-blogs', [DashboardController::class, 'getUnpostedBlogs'])->name('dashboard.get.unposted.blogs');
-
             Route::resource('blog', BlogController::class);
             Route::post('blog/upload', [BlogController::class, 'upload'])->name('blog.upload');
             Route::put('blog/toggle-status/{blog}', [BlogController::class, 'toggleStatus'])->name('blog.toggle.status');
             Route::put('blog/toggle-highlight/{blog}', [BlogController::class, 'toggleHighlight'])->name('blog.toggle.highlight');
+        });
+        Route::controller(DashboardController::class)->group(function () {
+            Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+            Route::delete('dashboard/clear-blogs', [DashboardController::class, 'clearBlogs'])->name('dashboard.clear.blogs');
+            Route::get('dashboard/get-unposted-blogs', [DashboardController::class, 'getUnpostedBlogs'])->name('dashboard.get.unposted.blogs');
+
+            Route::get('dashboard/get-status', [DashboardController::class, 'getStatus'])->name('dashboard.get.status');
+            Route::put('dashboard/update-status', [DashboardController::class, 'updateStatus'])->name('dashboard.update.status');
         });
     });
 });
