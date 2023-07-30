@@ -3,15 +3,16 @@
 use App\Models\Blog;
 use App\Models\User;
 use Inertia\Inertia;
+use App\Models\Setting;
 use Jenssegers\Agent\Facades\Agent;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Request;
+use Stevebauman\Location\Facades\Location;
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Web\BlogController as WebBlogController;
-use Stevebauman\Location\Facades\Location;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,6 +51,7 @@ Route::controller(WebBlogController::class)->group(function () {
             'canRegister' => Route::has('register'),
             'laravelVersion' => Application::VERSION,
             'phpVersion' => PHP_VERSION,
+            'setting' => Setting::first(),
         ]);
     })->name('welcome');
     Route::get('{blog}-{slug}', [WebBlogController::class, 'showWithSlug'])->name('blog.show.with.slug');

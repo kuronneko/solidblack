@@ -30,12 +30,12 @@
 
 <div class="flex items-center justify-center">
         <div class="mt-14 rounded-lg dark:text-white" id="logo-container">
-        Rev 0.10101110111111
+        {{ setting.status }}
         </div>
     </div>
     <div class="flex items-center justify-center">
         <div class="px-5 py-5 rounded-lg" id="logo-container">
-        <img :src="randomImage" alt="" class="w-80 h-auto">
+        <img :src="randomImage" alt="" class="w-18 h-auto">
         </div>
     </div>
 
@@ -101,12 +101,30 @@ export default {
         canRegister: Boolean,
         laravelVersion: String,
         phpVersion: String,
+        setting: Object,
     },
     data() {
         return {
             images: [
-        '/img/orin1.png',
-        '/img/orin2.png',
+        '/img/banner (1).png',
+        '/img/banner (2).png',
+        '/img/banner (3).png',
+        '/img/banner (4).png',
+        '/img/banner (5).png',
+        '/img/banner (6).png',
+        '/img/banner (7).png',
+        '/img/banner (8).png',
+        '/img/banner (9).png',
+        '/img/banner (10).png',
+        '/img/banner (11).png',
+        '/img/banner (12).png',
+        '/img/banner (13).png',
+        '/img/banner (14).png',
+        '/img/banner (15).png',
+        '/img/banner (16).png',
+        '/img/banner (17).png',
+        '/img/banner (18).png',
+        '/img/banner (19).png',
       ],
             blogs: [],
             moment: moment,
