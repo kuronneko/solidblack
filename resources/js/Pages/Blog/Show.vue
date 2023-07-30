@@ -4,7 +4,7 @@
             <div class="flex">
                 <div>
                     <h2 class="font-semibold text-xl leading-tight">
-                        Blog Show
+                        Blog preview
                     </h2>
                 </div>
                 <div class="ml-auto">
@@ -19,13 +19,13 @@
             </div>
         </template>
 
-        <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="py-7">
+            <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white dark:bg-neutral-900 dark:text-neutral-200 overflow-hidden shadow-xl sm:rounded-lg">
                     <div class="p-4 sm:px-6 ck-content">
                         <h2>{{ blog.name }}</h2>
                         <div v-html="blog.content"></div>
-                        <p class="text-xs italic text-right mt-10">Published at {{
+                        <p class="text-xs italic text-right mt-10 text-neutral-600 hover:text-blue-800 dark:hover:text-red-600">Published at {{
                             moment(blog.published_at).format('MMMM Do YYYY, h:mm:ss a')
                         }}</p>
                     </div>

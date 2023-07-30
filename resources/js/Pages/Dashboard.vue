@@ -1,6 +1,10 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
 import Welcome from '@/Components/Welcome.vue';
+import ClearBlogs from '@/Pages/Dashboard/ClearBlogs.vue';
+import UploadLogo from '@/Pages/Dashboard/UploadLogo.vue';
+import SectionBorder from '@/Components/SectionBorder.vue';
+import StatusUpdate from './Dashboard/StatusUpdate.vue';
 </script>
 
 <template>
@@ -13,8 +17,16 @@ import Welcome from '@/Components/Welcome.vue';
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+                <div class="">
+                    <ClearBlogs></ClearBlogs>
 
+                    <SectionBorder />
+
+                    <UploadLogo></UploadLogo>
+
+                    <SectionBorder />
+
+                    <StatusUpdate></StatusUpdate>
                 </div>
             </div>
         </div>
