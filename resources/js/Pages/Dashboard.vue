@@ -21,11 +21,11 @@ import StatusUpdate from './Dashboard/StatusUpdate.vue';
 
                     <SectionBorder />
 
-                    <UploadLogo class="mt-10"></UploadLogo>
+                    <UploadLogo class="mt-10 sm:mt-0"></UploadLogo>
 
                     <SectionBorder />
 
-                    <StatusUpdate class="mt-10"></StatusUpdate>
+                    <StatusUpdate class="mt-10 sm:mt-0"></StatusUpdate>
             </div>
         </div>
     </AppLayout>
