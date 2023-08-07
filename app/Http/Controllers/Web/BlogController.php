@@ -24,9 +24,15 @@ class BlogController extends Controller
      */
     public function getAllBlogs()
     {
-        return response()->json([
-            'blogs' => Blog::where('status', 2)->orderBy('created_at', 'desc')->skip(request('skip'))->take(request('take'))->get(),
-        ]);
+        if(Auth::user()){
+            return response()->json([
+                'blogs' => Blog::orderBy('created_at', 'desc')->skip(request('skip'))->take(request('take'))->get(),
+            ]);
+        }else{
+            return response()->json([
+                'blogs' => Blog::where('status', 2)->orderBy('created_at', 'desc')->skip(request('skip'))->take(request('take'))->get(),
+            ]);
+        }
     }
 
     /**
