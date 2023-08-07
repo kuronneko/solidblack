@@ -14,6 +14,7 @@ use App\Services\ImageService;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManagerStatic;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdateBlogRequest;
 
 class BlogController extends Controller
 {
@@ -41,13 +42,17 @@ class BlogController extends Controller
      */
     public function create()
     {
-        $blog = Blog::create([
-            'user_id' => Auth::user()->id,
-            'name' => '',
-            'content' => '',
-            'slug' => '',
-        ]);
-        return Inertia::render('Blog/Create', compact('blog'));
+        try {
+            $blog = Blog::create([
+                'user_id' => Auth::user()->id,
+                'name' => '',
+                'content' => '',
+                'slug' => '',
+            ]);
+            return Inertia::render('Blog/Create', compact('blog'));
+        } catch (\Throwable $th) {
+            dd($th->getMessage());
+        }
     }
 
     /**
@@ -56,14 +61,9 @@ class BlogController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreBlogRequest $request)
+    public function store($request)
     {
-        /*         Blog::create([
-            'user_id' => Auth::user()->id,
-            'title' => $request->title,
-            'content' => $request->content,
-        ]);
-        return redirect()->route('blog.index'); */
+
     }
 
     /**
@@ -95,18 +95,22 @@ class BlogController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreBlogRequest $request)
+    public function update(UpdateBlogRequest $request)
     {
-        $blog = Blog::findOrFail(request('blog'));
-        $blog->update([
-            'name' => $request->name,
-            'content' => $request->content,
-            'slug' => Str::slug($request->name),
-            'status' => $request->status,
-            'published_at' => $request->date,
-            'highlight' => $request->highlight,
-        ]);
-        return redirect()->route('blog.index');
+        try {
+            $blog = Blog::findOrFail(request('blog'));
+            $blog->update([
+                'name' => $request->name,
+                'content' => $request->content,
+                'slug' => Str::slug($request->name),
+                'status' => $request->status,
+                'published_at' => $request->date,
+                'highlight' => $request->highlight,
+            ]);
+            return redirect()->route('blog.index');
+        } catch (\Throwable $th) {
+            dd($th->getMessage());
+        }
     }
 
     /**
@@ -117,31 +121,23 @@ class BlogController extends Controller
      */
     public function destroy(Blog $blog)
     {
-        $folderPath = 'public/images/' . $blog->id;
-        if (Storage::exists($folderPath)) {  //check if folder exist
-            Storage::deleteDirectory($folderPath);
+        try {
+            $folderPath = 'public/images/' . $blog->id;
+            if (Storage::exists($folderPath)) {
+                Storage::deleteDirectory($folderPath);
+            }
+            $blog->delete();
+            return redirect()->back();
+        } catch (\Throwable $th) {
+            dd($th->getMessage());
         }
-        $blog->delete();
-        return redirect()->back();
     }
 
     public function upload(Request $request)
     {
-        // Get the uploaded file
-        //$file = $request->file('upload');
-
-        // Generate a unique file name
-        //$fileName = uniqid() . '.' . $file->getClientOriginalExtension();
-
-        // Save the file to your desired location
-        // $file->storeAs('public/imagenes', $fileName);
-
-        // Return the response in the format required by CKEditor
-
         return response()->json([
             'uploaded' => true,
             'url' => ImageService::uploadImagen($request->file('upload'), $request->blog)
-            //'url' => asset('storage/imagenes/' . $fileName)
         ]);
     }
 
@@ -164,11 +160,9 @@ class BlogController extends Controller
                 $blog->timestamps = false;
                 $blog->save();
                 return redirect()->back();
-            } else {
-                return response()->json(['error' => 'Access deny']);
             }
         } catch (\Throwable $th) {
-            return response()->json(['error' => $th->getMessage()]);
+            dd($th->getMessage());
         }
     }
 
@@ -191,11 +185,9 @@ class BlogController extends Controller
                 $blog->timestamps = false;
                 $blog->save();
                 return redirect()->back();
-            } else {
-                return response()->json(['error' => 'Access deny']);
             }
         } catch (\Throwable $th) {
-            return response()->json(['error' => $th->getMessage()]);
+            dd($th->getMessage());
         }
     }
 

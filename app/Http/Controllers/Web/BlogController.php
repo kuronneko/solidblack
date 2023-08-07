@@ -24,9 +24,15 @@ class BlogController extends Controller
      */
     public function getAllBlogs()
     {
-        return response()->json([
-            'blogs' => Blog::where('status', 2)->orderBy('created_at', 'desc')->skip(request('skip'))->take(request('take'))->get(),
-        ]);
+        if(Auth::user()){
+            return response()->json([
+                'blogs' => Blog::orderBy('created_at', 'desc')->skip(request('skip'))->take(request('take'))->get(),
+            ]);
+        }else{
+            return response()->json([
+                'blogs' => Blog::where('status', 2)->orderBy('created_at', 'desc')->skip(request('skip'))->take(request('take'))->get(),
+            ]);
+        }
     }
 
     /**
@@ -35,10 +41,10 @@ class BlogController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function showWithSlug(Blog $blog, $slug)
+    public function showWithSlug($slug)
     {
-        //$blog = Blog::where('slug', request('slug'))->first();
-        if (Str::slug($blog->slug, "-") != $slug) {
+        $blog = Blog::where('slug', $slug)->first();
+        if (!$blog) {
             abort(404);
         } else {
             return Inertia::render('Blog', compact('blog'));

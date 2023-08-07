@@ -47,7 +47,7 @@
                         <h2>{{ blog.name }}</h2>
                         <div v-html="blog.content.slice(0, 2000) + (blog.content.length > 2000 ? '...' : '')"></div>
                         <div class="text-center mt-5">
-                            <Link :href="route('blog.show.with.slug', [blog.id, blog.slug])" class="">
+                            <Link :href="route('blog.show.with.slug', [blog.slug])" class="">
                             <span
                                 class="text-blue-700 hover:text-blue-800 dark:text-red-500 text-sm dark:hover:text-red-600">Continue
                                 reading the

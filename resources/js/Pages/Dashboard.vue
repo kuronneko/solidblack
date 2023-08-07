@@ -17,17 +17,15 @@ import StatusUpdate from './Dashboard/StatusUpdate.vue';
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="">
                     <ClearBlogs></ClearBlogs>
 
                     <SectionBorder />
 
-                    <UploadLogo></UploadLogo>
+                    <UploadLogo class="mt-10"></UploadLogo>
 
                     <SectionBorder />
 
-                    <StatusUpdate></StatusUpdate>
-                </div>
+                    <StatusUpdate class="mt-10"></StatusUpdate>
             </div>
         </div>
     </AppLayout>
