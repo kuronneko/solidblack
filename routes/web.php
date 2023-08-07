@@ -54,7 +54,7 @@ Route::controller(WebBlogController::class)->group(function () {
             'setting' => Setting::first(),
         ]);
     })->name('welcome');
-    Route::get('{blog}-{slug}', [WebBlogController::class, 'showWithSlug'])->name('blog.show.with.slug');
+    Route::get('{slug}', [WebBlogController::class, 'showWithSlug'])->name('blog.show.with.slug');
     Route::get('blog/all', [WebBlogController::class, 'getAllBlogs'])->name('blog.all');
 });
 

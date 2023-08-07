@@ -184,15 +184,28 @@ export default {
                 this.v$.$touch();
                 if (!this.v$.$error) {
                     setTimeout(() => {
-                        this.Toast().fire({
-                            icon: 'success',
-                            title: 'Blog created'
-                        })
                         this.isLoading = false;
-                        Inertia.post(route("blog.update", { 'blog': this.blog.id }), {
-                            ...this.form,
-                            _method: 'put',
-                        });
+                        Inertia.post(route("blog.update", { 'blog': this.blog.id }),
+                            {
+                                ...this.form,
+                                _method: 'put',
+                            },
+                            {
+                                onSuccess: (response) => {
+                                    this.Toast().fire({
+                                        icon: 'success',
+                                        title: 'Blog created'
+                                    })
+                                },
+                                onError: (errors) => {
+                                    console.log(errors)
+                                    this.Toast().fire({
+                                        icon: 'error',
+                                        title: Object.values(errors).join('\n'),
+                                    })
+                                },
+                            }
+                        );
                     }, 1000)
                 } else {
                     this.Toast().fire({

@@ -2,9 +2,11 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Blog;
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreBlogRequest extends FormRequest
+class UpdateBlogRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +26,12 @@ class StoreBlogRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('blogs', 'name')->ignore(Blog::findOrFail($this->blog))
+            ],
             'content' => 'required',
             'status' => 'required',
         ];
