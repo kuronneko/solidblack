@@ -1,5 +1,5 @@
 <template>
-    <Head title="Welcome" />
+    <Head title="Home" />
 
     <div class="relative max-w-4xl mx-auto py-2">
   <div v-if="canLogin" class="absolute top-0 right-0 px-6 py-4 sm:block">
@@ -48,13 +48,14 @@
                         <div v-html="blog.content.slice(0, 2000) + (blog.content.length > 2000 ? '...' : '')"></div>
                         <div class="text-center mt-5">
                             <Link :href="route('blog.show.with.slug', [blog.slug])" class="">
-                            <span
-                                class="text-blue-700 hover:text-blue-800 dark:text-red-500 text-sm dark:hover:text-red-600">Continue
-                                reading the
-                                article</span>
+                                    <span
+                                class="text-blue-700 hover:text-blue-800 dark:text-red-500 text-xs dark:hover:text-red-600">Continue
+                                reading this
+                                blog
+                                    </span>
                             </Link>
                         </div>
-                        <p class="text-xs italic text-right mt-10 text-neutral-600 hover:text-blue-800 dark:hover:text-red-600">Published at {{
+                        <p class="text-xs italic text-right mt-5 text-neutral-600 hover:text-blue-800 dark:hover:text-red-600">Published at {{
                             moment(blog.published_at).format('MMMM Do YYYY, h:mm:ss a')
                         }}</p>
                     </div>
