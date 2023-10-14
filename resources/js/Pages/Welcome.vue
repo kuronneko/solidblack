@@ -45,17 +45,15 @@
                 <div class="bg-white dark:bg-neutral-900 dark:text-neutral-200 overflow-hidden shadow-xl sm:rounded-lg">
                     <div class="p-4 sm:px-6 ck-content">
                         <h2>{{ blog.name }}</h2>
-                        <div v-html="blog.content.slice(0, 2000) + (blog.content.length > 2000 ? '...' : '')"></div>
-                        <div class="text-center mt-5">
+                        <div v-html="blog.content.slice(0, 300) + (blog.content.length > 300 ? '...' : '')"></div>
+                        <div class="text-right mt-5">
                             <Link :href="route('blog.show.with.slug', [blog.slug])" class="">
-                                    <span
-                                class="text-blue-700 hover:text-blue-800 dark:text-red-500 text-xs dark:hover:text-red-600">Continue
-                                reading this
-                                blog
-                                    </span>
+                            <span class="text-blue-700 hover:text-blue-800 dark:text-red-500 text-xs dark:hover:text-red-600">
+                                Continue reading this blog
+                            </span>
                             </Link>
                         </div>
-                        <p class="text-xs italic text-right mt-5 text-neutral-600 hover:text-blue-800 dark:hover:text-red-600">Published at {{
+                        <p class="text-xs italic text-right mt-0 text-neutral-600 hover:text-blue-800 dark:hover:text-red-600">Published at {{
                             moment(blog.published_at).format('MMMM Do YYYY, h:mm:ss a')
                         }}</p>
                     </div>
@@ -130,6 +128,7 @@ export default {
             blogs: [],
             moment: moment,
             start: 6,
+            take: 6,
             stop: false,
             isLoading: false,
             style: localStorage.theme,
@@ -191,30 +190,27 @@ export default {
             }
         },
         getInitialBlogs() {
-            this.axios.get(`blog/all?skip=${0}&take=${this.start}`).then((response) => {
+            this.axios.get(`blog/all?skip=${0}&take=${this.take}`).then((response) => {
                 this.blogs = response.data.blogs;
             });
         },
         getNextBlog() {
             window.onscroll = () => {
-                this.isLoading = true;
-                //const blogsContainer = document.getElementById("blogs-container");
-                //let bottomOfblogsContainer = window.innerHeight + window.pageYOffset >= blogsContainer.offsetTop + blogsContainer.offsetHeight;
-                let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight;
-                if (bottomOfWindow) {
-                    if (this.stop == false) {
+                const blogsContainer = document.getElementById("blogs-container");
+                let bottomOfblogsContainer = window.innerHeight + window.pageYOffset >= blogsContainer.offsetTop + blogsContainer.offsetHeight;
+                //let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight;
+                if (bottomOfblogsContainer && !this.stop && !this.isLoading) {
+                    this.isLoading = true;
                         setTimeout(() => {
-                            axios.get(`blog/all?skip=${this.start}&take=${1}`).then(response => {
-                                //this.blogs = [];
+                            axios.get(`blog/all?skip=${this.start}&take=${this.take}`).then(response => {
                                 this.blogs.push(...response.data.blogs);
-                                this.start = this.start + 1;
-                                this.isLoading = false;
-                                if (response.data.blogs.length == 0) {
+                                this.start = this.start + this.take;
+                                if (response.data.blogs.length === 0) {
                                     this.stop = true;
                                 }
+                                this.isLoading = false;
                             });
                         }, Math.floor(Math.random() * (800 - 300 + 1) + 300))
-                    }
                 }
             }
         },
