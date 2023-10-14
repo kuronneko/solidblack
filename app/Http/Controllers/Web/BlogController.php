@@ -26,7 +26,7 @@ class BlogController extends Controller
     {
         if(Auth::user()){
             return response()->json([
-                'blogs' => Blog::orderBy('created_at', 'desc')->skip(request('skip'))->take(request('take'))->get(),
+                'blogs' => Blog::whereIn('status', [1, 2])->orderBy('created_at', 'desc')->skip(request('skip'))->take(request('take'))->get(),
             ]);
         }else{
             return response()->json([

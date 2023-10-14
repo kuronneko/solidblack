@@ -25,7 +25,7 @@ class BlogController extends Controller
      */
     public function index()
     {
-        $blogs = Blog::where('user_id', Auth::user()->id)->whereIn('status', [1, 2])->orderBy("created_at", 'desc');
+        $blogs = Blog::where('user_id', Auth::user()->id)->whereIn('status', [0, 1, 2])->orderBy("created_at", 'desc');
         $search = "";
         if (request()->has("search")) {
             $search = request("search");

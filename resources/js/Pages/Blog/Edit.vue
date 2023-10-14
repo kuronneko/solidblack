@@ -181,7 +181,7 @@ export default {
                                 onSuccess: (response) => {
                                     this.Toast().fire({
                                         icon: 'success',
-                                        title: 'Blog created'
+                                        title: 'Blog edited'
                                     })
                                 },
                                 onError: (errors) => {
