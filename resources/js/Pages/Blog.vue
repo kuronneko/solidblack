@@ -43,7 +43,7 @@
         </div>
     </div>
 
-    <div class="py-12">
+    <div class="pt-6 mb-12">
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-neutral-900 dark:text-neutral-200 overflow-hidden shadow-xl sm:rounded-lg">
                 <div class="p-4 sm:px-6 ck-content">
