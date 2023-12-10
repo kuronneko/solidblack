@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Models\Blog;
 use Inertia\Inertia;
+use App\Models\Setting;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Services\BlogService;
@@ -44,10 +45,11 @@ class BlogController extends Controller
     public function showWithSlug($slug)
     {
         $blog = Blog::where('slug', $slug)->first();
+        $setting = Setting::first();
         if (!$blog) {
             abort(404);
         } else {
-            return Inertia::render('Blog', compact('blog'));
+            return Inertia::render('Blog', compact('blog', 'setting'));
         }
     }
 }
