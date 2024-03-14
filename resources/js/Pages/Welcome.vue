@@ -29,33 +29,27 @@
     </div>
 
     <div class="flex items-center justify-center">
-        <div class="mt-14 rounded-lg dark:text-white" id="logo-container">
+        <div class="mt-10 rounded-lg dark:text-white" id="logo-container">
             {{ setting.status }}
         </div>
     </div>
     <div class="flex items-center justify-center">
-        <div class="px-5 py-5 rounded-lg" id="logo-container">
-            <img :src="randomImage" alt="" class="w-18 h-auto">
+        <div class="px-5 py-5" id="logo-container">
+            <img :src="randomImage" alt="" class="w-32 h-auto">
         </div>
     </div>
 
-    <div class="pt-6 mb-6" id="blogs-container">
+    <div class="pt-3 mb-6" id="blogs-container">
         <div v-for="blog in blogs" :key="blog.id">
-            <div class="max-w-4xl mx-auto sm:px-6 lg:px-8 pb-6">
+            <div class="max-w-4xl mx-auto sm:px-6 lg:px-8 pb-2">
                 <div class="bg-white dark:bg-neutral-900 dark:text-neutral-200 overflow-hidden shadow-xl sm:rounded-lg">
                     <div class="p-4 sm:px-6 ck-content">
-                        <h2>{{ blog.name }}</h2>
+                        <Link :href="route('blog.show.with.slug', [blog.slug])">
+                            <h3 class=" hover:text-blue-800 dark:hover:text-red-600">{{ blog.name }}</h3>
+                        </Link>
                         <div v-html="blog.content.slice(0, 300) + (blog.content.length > 300 ? '...' : '')"></div>
-                        <div class="text-right mt-5">
-                            <Link :href="route('blog.show.with.slug', [blog.slug])" class="">
-                            <span
-                                class="text-blue-700 hover:text-blue-800 dark:text-red-500 text-xs dark:hover:text-red-600">
-                                Continue reading this blog
-                            </span>
-                            </Link>
-                        </div>
-                        <p
-                            class="text-xs italic text-right mt-0 text-neutral-600 hover:text-blue-800 dark:hover:text-red-600">
+                            <p
+                            class="text-xs italic text-right mt-10 text-neutral-600 hover:text-blue-800 dark:hover:text-red-600">
                             Published at {{
                                 moment(blog.published_at).format('MMMM Do YYYY, h:mm:ss a')
                             }}</p>

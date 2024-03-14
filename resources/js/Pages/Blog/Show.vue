@@ -23,7 +23,9 @@
             <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white dark:bg-neutral-900 dark:text-neutral-200 overflow-hidden shadow-xl sm:rounded-lg">
                     <div class="p-4 sm:px-6 ck-content">
-                        <h2>{{ blog.name }}</h2>
+                        <Link>
+                            <h3 class=" hover:text-blue-800 dark:hover:text-red-600">{{ blog.name }}</h3>
+                        </Link>
                         <div v-html="blog.content"></div>
                         <p class="text-xs italic text-right mt-10 text-neutral-600 hover:text-blue-800 dark:hover:text-red-600">Published at {{
                             moment(blog.published_at).format('MMMM Do YYYY, h:mm:ss a')
