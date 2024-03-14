@@ -27,7 +27,7 @@
                             <h3 class=" hover:text-blue-800 dark:hover:text-red-600">{{ blog.name }}</h3>
                         </Link>
                         <div v-html="blog.content"></div>
-                        <p class="text-xs italic text-right mt-10 text-neutral-600 hover:text-blue-800 dark:hover:text-red-600">Published at {{
+                        <p class="text-xs italic text-right mt-5 text-neutral-600 hover:text-blue-800 dark:hover:text-red-600">Published at {{
                             moment(blog.published_at).format('MMMM Do YYYY, h:mm:ss a')
                         }}</p>
                     </div>
