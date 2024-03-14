@@ -33,21 +33,23 @@
     </div>
 
     <div class="flex items-center justify-center">
-        <div class="mt-14 rounded-lg dark:text-white" id="logo-container">
+        <div class="mt-10 rounded-lg dark:text-white" id="logo-container">
             {{ setting.status }}
         </div>
     </div>
     <div class="flex items-center justify-center">
-        <div class="px-5 py-5 rounded-lg" id="logo-container">
-            <img :src="randomImage" alt="" class="w-18 h-auto">
+        <div class="px-5 py-5" id="logo-container">
+            <img :src="randomImage" alt="" class="w-32 h-auto">
         </div>
     </div>
 
-    <div class="pt-6 mb-12">
+    <div class="pt-3 mb-12">
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-neutral-900 dark:text-neutral-200 overflow-hidden shadow-xl sm:rounded-lg">
                 <div class="p-4 sm:px-6 ck-content">
-                    <h2>{{ blog.name }}</h2>
+                    <Link>
+                        <h3 class=" hover:text-blue-800 dark:hover:text-red-600">{{ blog.name }}</h3>
+                    </Link>
                     <div v-html="blog.content"></div>
                     <p class="text-xs italic text-right mt-10 text-neutral-600 hover:text-blue-800 dark:hover:text-red-600">
                         Published at {{
