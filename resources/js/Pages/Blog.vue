@@ -1,68 +1,45 @@
 <template>
+
     <Head>
         <title>{{ blog.name }}</title>
     </Head>
 
-    <div class="relative max-w-4xl mx-auto py-2">
-        <div class="absolute top-0 right-0 px-6 py-4 sm:block">
-            <Link :href="route('welcome')">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                class="w-6 h-6 text-gray-700 dark:text-gray-500">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
-            </svg>
-            </Link>
+    <AppLayoutPublic :section="section">
+        <div class="flex items-center justify-center">
+            <div class="mt-10 rounded-lg dark:text-white" id="logo-container">
+                {{ setting.status }}
+            </div>
         </div>
-        <div class="absolute top-0 left-0 px-6 py-4 sm:block text-gray-700 dark:text-gray-500">
-            <button id="toggle-dark-mode" @click="toggle">
-                <div v-if="this.style == 'dark'">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="w-6 h-6 text-gray-700 dark:text-gray-500">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
-                    </svg>
-                </div>
-                <div v-if="this.style == 'light'">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="w-6 h-6 text-gray-700 dark:text-gray-500">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" />
-                    </svg>
-                </div>
-            </button>
+        <div class="flex items-center justify-center">
+            <div class="px-5 py-5" id="logo-container">
+                <img :src="randomImage" alt="" class="w-32 h-auto">
+            </div>
         </div>
-    </div>
 
-    <div class="flex items-center justify-center">
-        <div class="mt-10 rounded-lg dark:text-white" id="logo-container">
-            {{ setting.status }}
-        </div>
-    </div>
-    <div class="flex items-center justify-center">
-        <div class="px-5 py-5" id="logo-container">
-            <img :src="randomImage" alt="" class="w-32 h-auto">
-        </div>
-    </div>
-
-    <div class="pt-3 mb-12">
-        <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-neutral-900 dark:text-neutral-200 overflow-hidden shadow-xl sm:rounded-lg">
-                <div class="p-4 sm:px-6 ck-content">
-                    <Link>
+        <div class="pt-3 mb-6">
+            <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
+                <div class="bg-white dark:bg-neutral-900 dark:text-neutral-200 overflow-hidden shadow-xl sm:rounded-lg">
+                    <div class="p-4 sm:px-6 ck-content">
+                        <Link>
                         <h3 class=" hover:text-blue-800 dark:hover:text-red-600">{{ blog.name }}</h3>
-                    </Link>
-                    <div v-html="blog.content"></div>
-                    <p class="text-xs italic text-right mt-10 text-neutral-600 hover:text-blue-800 dark:hover:text-red-600">
-                        Published at {{
-                            moment(blog.published_at).format('MMMM Do YYYY, h:mm:ss a')
-                        }}</p>
+                        </Link>
+                        <div v-html="blog.content"></div>
+                        <p
+                            class="text-xs italic text-right mt-10 text-neutral-600 hover:text-blue-800 dark:hover:text-red-600">
+                            Published at {{
+            moment(blog.published_at).format('MMMM Do YYYY, h:mm:ss a')
+                            }}</p>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </AppLayoutPublic>
+
 </template>
 
 <script>
 import AppLayout from '@/Layouts/AppLayout.vue';
+import AppLayoutPublic from '@/Layouts/AppLayoutPublic.vue';
 import { Head, Link } from '@inertiajs/inertia-vue3';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import PrimaryButton from "@/Components/PrimaryButton.vue";
@@ -105,6 +82,7 @@ export default {
             ],
             moment: moment,
             style: localStorage.theme,
+            section: 'blog'
         };
     },
     mounted() {
@@ -150,6 +128,7 @@ export default {
     },
     components: {
         AppLayout,
+        AppLayoutPublic,
         PrimaryButton,
         TextInput,
         InputLabel,
