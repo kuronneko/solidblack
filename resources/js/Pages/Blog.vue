@@ -19,15 +19,16 @@
         <div class="pt-3 mb-6">
             <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
                 <div class="border-gray-300 dark:border-neutral-700 dark:text-neutral-200 overflow-hidden sm:border-gray-300 sm:dark:border-neutral-700 sm:rounded-sm sm:border-t-0 sm:border-b-1 sm:border-l-0 sm:border-r-0 sm:border rounded-sm border-t-0 border-b-1 border-l-0 border-r-0 border">
-                    <div class="p-4 sm:px-6 ck-content">
-                        <h3>>> {{ blog.name }}</h3>
+                    <div class="p-4 pt-2 sm:pb-4 sm-pt-2 sm:px-6 ck-content">
+                        <div class="mb-3">
+                                    <p class="hover:text-red-500 dark:hover:text-red-400 text-xl font-bold">>> {{ blog.name }}</p>
+                                    <p class="text-xxs italic text-left text-neutral-600 ">
+                                    Published at {{
+                                        blog.published_at
+                                    }}
+                                    </p>
+                                </div>
                         <div v-html="blog.content"></div>
-                        <p
-  class="text-xxs italic text-right mt-5 text-neutral-600 hover:text-red-500 dark:hover:text-red-400">
-  Published at {{
-    moment(blog.published_at).format('MMMM Do YYYY, h:mm:ss a')
-  }}
-</p>
                     </div>
                 </div>
             </div>
