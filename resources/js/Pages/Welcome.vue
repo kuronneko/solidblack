@@ -1,6 +1,6 @@
 <template>
 
-    <Head title="Home" />
+    <Head :title="setting.status" />
 
     <AppLayoutPublic :section="section" :canLogin="canLogin">
         <div class="flex items-center justify-center">
