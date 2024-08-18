@@ -23,10 +23,11 @@
                         <h3>>> {{ blog.name }}</h3>
                         <div v-html="blog.content"></div>
                         <p
-                            class="text-xs italic text-right mt-10 text-neutral-600 hover:text-red-500 dark:hover:text-red-400">
-                            Published at {{
-            moment(blog.published_at).format('MMMM Do YYYY, h:mm:ss a')
-                            }}</p>
+  class="text-xxs italic text-right mt-5 text-neutral-600 hover:text-red-500 dark:hover:text-red-400">
+  Published at {{
+    moment(blog.published_at).format('MMMM Do YYYY, h:mm:ss a')
+  }}
+</p>
                     </div>
                 </div>
             </div>
