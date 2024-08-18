@@ -26,5 +26,9 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         Setting::create(['status' => 'Hola mundo']);
+
+        $this->call([
+            DevUserSeeder::class,
+        ]);
     }
 }
