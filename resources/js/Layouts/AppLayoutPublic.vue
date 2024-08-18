@@ -112,11 +112,12 @@ export default {
         <slot />
     </main>
 
-    <footer class="text-gray-700 dark:text-gray-500 pb-4">
-        <div class="container mx-auto">
-            <div class="flex justify-center items-center">
-                <p class="text-xs">2023-{{ currentYear }} © All right reserved</p>
-            </div>
+    <footer class="text-neutral-600 pb-4">
+    <div class="container mx-auto">
+        <div class="flex justify-center items-center flex-col">
+            <p class="text-xs">2023-{{ currentYear }}</p>
+            <p class="text-xs text-secondary mt-2">This website is powered by <a class="text-secondary" href="https://cyberpunkwaifus.xyz" target="_blank">CBPW Technologies.</a></p>
         </div>
-    </footer>
+    </div>
+</footer>
 </template>
