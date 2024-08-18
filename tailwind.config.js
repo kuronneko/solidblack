@@ -17,6 +17,9 @@ module.exports = {
             fontFamily: {
                 mono: ['Space Mono', ...defaultTheme.fontFamily.mono],
             },
+            fontSize: {
+                'xxs': '0.625rem', // 10px
+              },
         },
     },
 
