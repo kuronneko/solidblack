@@ -46,20 +46,9 @@ class ImageService
                 $mainFileName = md5($img->getClientOriginalName() . Str::random(4)) . '.' . $img->getClientOriginalExtension();
                 $thumbFileName = pathinfo($mainFileName, PATHINFO_FILENAME) . '_thumb.' . pathinfo($mainFileName, PATHINFO_EXTENSION);
 
-                if (env('FILESYSTEM_DISK') == 's3') {
-                    // Define paths
-                    self::createBlogFolder();
-                    $mainImagePath = public_path('/storage/images/blog/' . $mainFileName);
-                    $thumbImagePath = public_path('/storage/images/blog/' . $thumbFileName);
-                } else {
-                    // All this functions are used by old logic to save images in storage
-                    // It create folders with the blog id, now we store all temporary images in the same folder "images/blog"
-                    // The path define the blog id folder, now we use the same path for all images
-                    // And the storage return specific path with the blog id
-                    self::creacionVerificacionCarpetas($blogId);
-                    $mainImagePath = public_path('/storage/images/' . $blogId . '/' . $mainFileName);
-                    $thumbImagePath = public_path('/storage/images/' . $blogId . '/' . $thumbFileName);
-                }
+                self::creacionVerificacionCarpetas($blogId);
+                $mainImagePath = public_path('/storage/images/' . $blogId . '/' . $mainFileName);
+                $thumbImagePath = public_path('/storage/images/' . $blogId . '/' . $thumbFileName);
 
                 // Resize and Save images
                 self::resizeImage($img)[0]->save($mainImagePath, 100);
@@ -67,8 +56,8 @@ class ImageService
 
                 if (env('FILESYSTEM_DISK') == 's3') {
                     // Upload to S3 and delete local files
-                    self::uploadImageToS3($mainImagePath, $mainFileName);
-                    return self::uploadImageToS3($thumbImagePath, $thumbFileName);
+                    self::uploadImageToS3($mainImagePath, $mainFileName, $blogId);
+                    return self::uploadImageToS3($thumbImagePath, $thumbFileName, $blogId);
                 } else {
                     return Storage::url('public/images/' . $blogId . '/' . $thumbFileName);
                 }
@@ -78,11 +67,11 @@ class ImageService
         }
     }
 
-    public static function uploadImageToS3($imagePath, $fileName)
+    public static function uploadImageToS3($imagePath, $fileName, $blogId)
     {
         // Upload the image to S3
         $s3Path = Storage::putFileAs(
-            env('AWS_UPLOAD_FOLDER'),
+            env('AWS_UPLOAD_FOLDER') . '/' . $blogId,
             new \Illuminate\Http\File($imagePath),
             $fileName,
             'public'
