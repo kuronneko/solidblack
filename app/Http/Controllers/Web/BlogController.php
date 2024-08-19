@@ -27,11 +27,11 @@ class BlogController extends Controller
     {
         if(Auth::user()){
             return response()->json([
-                'blogs' => Blog::whereIn('status', [1, 2])->orderBy('created_at', 'desc')->skip(request('skip'))->take(request('take'))->get(),
+                'blogs' => Blog::with(['user'])->whereIn('status', [1, 2])->orderBy('created_at', 'desc')->skip(request('skip'))->take(request('take'))->get(),
             ]);
         }else{
             return response()->json([
-                'blogs' => Blog::where('status', 2)->orderBy('created_at', 'desc')->skip(request('skip'))->take(request('take'))->get(),
+                'blogs' => Blog::with(['user'])->where('status', 2)->orderBy('created_at', 'desc')->skip(request('skip'))->take(request('take'))->get(),
             ]);
         }
     }
@@ -44,7 +44,7 @@ class BlogController extends Controller
      */
     public function showWithSlug($slug)
     {
-        $blog = Blog::where('slug', $slug)->first();
+        $blog = Blog::with(['user'])->where('slug', $slug)->first();
         $setting = Setting::first();
         if (!$blog) {
             abort(404);
