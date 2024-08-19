@@ -13,10 +13,10 @@ class ImageService
     {
         try {
             //verificación y o creación de la carpeta para las imagenes basadas en el nombre de la pagina, utilizando su slug
-            if (!file_exists(public_path('/storage/images/' . $blogId))) {
-                mkdir(public_path('/storage/images/' . $blogId), 0755, true);
+            if (!file_exists(public_path('/storage/blog/' . $blogId))) {
+                mkdir(public_path('/storage/blog/' . $blogId), 0755, true);
                 return true;
-            } elseif (file_exists(public_path('/storage/images/' . $blogId))) {
+            } elseif (file_exists(public_path('/storage/blog/' . $blogId))) {
                 return true;
             } else {
                 return false;
@@ -26,10 +26,10 @@ class ImageService
         }
     }
 
-    public static function createBlogFolder()
+    public static function createTempFolder()
     {
         try {
-            $path = public_path('/storage/images/blog');
+            $path = public_path('/storage/temp/');
             if (!file_exists($path)) {
                 mkdir($path, 0755, true);
             }
@@ -38,6 +38,7 @@ class ImageService
             return response()->json(['error' => $th->getMessage()]);
         }
     }
+
     public static function uploadImagen($img, $blogId)
     {
         try {
@@ -46,9 +47,15 @@ class ImageService
                 $mainFileName = md5($img->getClientOriginalName() . Str::random(4)) . '.' . $img->getClientOriginalExtension();
                 $thumbFileName = pathinfo($mainFileName, PATHINFO_FILENAME) . '_thumb.' . pathinfo($mainFileName, PATHINFO_EXTENSION);
 
-                self::creacionVerificacionCarpetas($blogId);
-                $mainImagePath = public_path('/storage/images/' . $blogId . '/' . $mainFileName);
-                $thumbImagePath = public_path('/storage/images/' . $blogId . '/' . $thumbFileName);
+                if (env('FILESYSTEM_DISK') == 's3') {
+                    self::createTempFolder();
+                    $mainImagePath = public_path('/storage/temp/' . $mainFileName);
+                    $thumbImagePath = public_path('/storage/temp/' . $thumbFileName);
+                } else {
+                    self::creacionVerificacionCarpetas($blogId);
+                    $mainImagePath = public_path('/storage/blog/' . $blogId . '/' . $mainFileName);
+                    $thumbImagePath = public_path('/storage/blog/' . $blogId . '/' . $thumbFileName);
+                }
 
                 // Resize and Save images
                 self::resizeImage($img)[0]->save($mainImagePath, 100);
@@ -59,7 +66,7 @@ class ImageService
                     self::uploadImageToS3($mainImagePath, $mainFileName, $blogId);
                     return self::uploadImageToS3($thumbImagePath, $thumbFileName, $blogId);
                 } else {
-                    return Storage::url('public/images/' . $blogId . '/' . $thumbFileName);
+                    return Storage::url('public/blog/' . $blogId . '/' . $thumbFileName);
                 }
             }
         } catch (\Throwable $th) {
