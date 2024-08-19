@@ -20,7 +20,7 @@ class UpdateImageUrlsSeeder extends Seeder
             ->get();
 
         $pattern = '/<img src="\/storage\/images\/(\d+)\/([a-f0-9]+_thumb\.jpg)">/i';
-        $replacement = '<img src="https://cbpw.nyc3.cdn.digitaloceanspaces.com/images/$1/$2">';
+        $replacement = '<img src="https://cbpw.nyc3.cdn.digitaloceanspaces.com/blog/$1/$2">';
 
         foreach ($entries as $entry) {
             $updatedContent = preg_replace($pattern, $replacement, $entry->content);
