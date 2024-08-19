@@ -61,10 +61,7 @@ class BlogController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store($request)
-    {
-
-    }
+    public function store($request) {}
 
     /**
      * Display the specified resource.
@@ -122,11 +119,20 @@ class BlogController extends Controller
     public function destroy(Blog $blog)
     {
         try {
-            $folderPath = 'public/images/' . $blog->id;
-            if (Storage::exists($folderPath)) {
-                Storage::deleteDirectory($folderPath);
+            if (env('FILESYSTEM_DISK') == 's3') {
+                $folderPath = env('AWS_UPLOAD_FOLDER') . '/' . $blog->id;
+                if (Storage::disk('s3')->exists($folderPath)) {
+                    Storage::disk('s3')->deleteDirectory($folderPath);
+                }
+            } else {
+                $folderPath = 'public/blog/' . $blog->id;
+                if (Storage::exists($folderPath)) {
+                    Storage::deleteDirectory($folderPath);
+                }
             }
+
             $blog->delete();
+
             return redirect()->back();
         } catch (\Throwable $th) {
             dd($th->getMessage());
@@ -190,5 +196,4 @@ class BlogController extends Controller
             dd($th->getMessage());
         }
     }
-
 }

@@ -93,10 +93,16 @@ class DashboardController extends Controller
             $blogs = Blog::where('status', 0)->get();
 
             foreach ($blogs as $blog) {
-                $folderPath = 'public/images/' . $blog->id;
-
-                if (Storage::exists($folderPath)) {  //check if folder exists
-                    Storage::deleteDirectory($folderPath);
+                if (env('FILESYSTEM_DISK') == 's3') {
+                    $folderPath = env('AWS_UPLOAD_FOLDER') . '/' . $blog->id;
+                    if (Storage::disk('s3')->exists($folderPath)) {
+                        Storage::disk('s3')->deleteDirectory($folderPath);
+                    }
+                } else {
+                    $folderPath = 'public/blog/' . $blog->id;
+                    if (Storage::exists($folderPath)) {
+                        Storage::deleteDirectory($folderPath);
+                    }
                 }
 
                 $blog->delete();
@@ -111,7 +117,8 @@ class DashboardController extends Controller
         }
     }
 
-    public function getUnpostedBlogs(){
+    public function getUnpostedBlogs()
+    {
         try {
             $blogs = Blog::where('status', 0)->get();
 
@@ -123,7 +130,8 @@ class DashboardController extends Controller
         }
     }
 
-    public function getStatus(){
+    public function getStatus()
+    {
         try {
             return response()->json(['status' => Setting::first()->status]);
         } catch (\Throwable $th) {
@@ -131,17 +139,16 @@ class DashboardController extends Controller
         }
     }
 
-    public function updateStatus(){
+    public function updateStatus()
+    {
         try {
             $setting = Setting::first();
             $setting->status = request('status');
             $setting->update();
 
             return redirect()->back();
-
         } catch (\Throwable $th) {
             return response()->json(['error' => $th->getMessage()]);
         }
     }
-
 }
