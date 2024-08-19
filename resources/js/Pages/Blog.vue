@@ -25,9 +25,9 @@
                                     <p class="text-xxs italic text-left text-neutral-600 ">
                                     Published at {{
                                         blog.published_at
-                                    }}
+                                    }}   by {{ blog.user.name }}
                                     </p>
-                                </div>
+                        </div>
                         <div v-html="blog.content"></div>
                     </div>
                 </div>

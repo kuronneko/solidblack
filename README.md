@@ -35,5 +35,8 @@ How to install [Docker]
     ./vendor/bin/sail php artisan key:generate
     ./vendor/bin/sail php artisan storage:link
     ./vendor/bin/sail php artisan migrate:refresh --seed
+        Username; dev@example.com
+        Password; 00000000
     ./vendor/bin/sail build --no-cache (REBUILD IMAGE) (OPTIONAL)
+
 
