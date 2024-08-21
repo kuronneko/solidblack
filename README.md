@@ -14,13 +14,13 @@ Minimalist blog using Jetstream as base with Inertia stack, design for posting a
 ### Features adn Technologies:
 * Laravel 9 + VueJS 3 + TailwindCSS
 * Single-page app using InertiaJS
-* AWS EC2 R53
 * Custom CKEditor
 * Amazing minimalist admin panel and web design
 * Dark mode
 * Infinite scroll
 * Private posts
 * Image Storage
+* S3 support
 
 ### Preview:
 <p> <img src="https://kuronneko.github.io/assets/img/portfolioblog.png" width="450"> </p>
@@ -39,4 +39,12 @@ How to install [Docker]
         Password; 00000000
     ./vendor/bin/sail build --no-cache (REBUILD IMAGE) (OPTIONAL)
 
+S3 support simply configure the .env parameters and set FILESYSTEM_DISK=s3
+
+    AWS_ACCESS_KEY_ID=
+    AWS_SECRET_ACCESS_KEY=
+    AWS_DEFAULT_REGION=
+    AWS_ENDPOINT=
+    AWS_BUCKET=
+    AWS_UPLOAD_FOLDER=
 
