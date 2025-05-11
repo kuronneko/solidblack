@@ -38,6 +38,8 @@ How to install [Docker]
         Username; dev@example.com
         Password; 00000000
     ./vendor/bin/sail build --no-cache (REBUILD IMAGE) (OPTIONAL)
+    ./vendor/bin/sail npm install
+    ./vendor/bin/sail npm run dev
 
 S3 support simply configure the .env parameters and set FILESYSTEM_DISK=s3
 
