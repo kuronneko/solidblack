@@ -5,6 +5,7 @@ import ClearBlogs from '@/Pages/Dashboard/ClearBlogs.vue';
 import UploadLogo from '@/Pages/Dashboard/UploadLogo.vue';
 import SectionBorder from '@/Components/SectionBorder.vue';
 import StatusUpdate from './Dashboard/StatusUpdate.vue';
+import Categories from './Dashboard/Categories.vue';
 </script>
 
 <template>
@@ -26,6 +27,10 @@ import StatusUpdate from './Dashboard/StatusUpdate.vue';
                     <SectionBorder />
 
                     <StatusUpdate class="mt-10 sm:mt-0"></StatusUpdate>
+
+                    <SectionBorder />
+
+                    <Categories class="mt-10 sm:mt-0"></Categories>
             </div>
         </div>
     </AppLayout>

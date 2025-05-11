@@ -8,7 +8,7 @@
                 {{ setting.status }}
             </div>
         </div>
-<!--          <div class="flex items-center justify-center">
+        <!--          <div class="flex items-center justify-center">
             <div class="px-5 py-5" id="logo-container">
                 <img :src="randomImage" alt="" class="w-32 h-auto">
             </div>
@@ -17,17 +17,19 @@
         <div class="pt-3 mb-6" id="blogs-container">
             <div v-for="blog in blogs" :key="blog.id">
                 <div class="max-w-4xl mx-auto sm:px-6 lg:px-8 pb-2">
-                    <div class="border-gray-300 dark:border-neutral-700 dark:text-neutral-200 overflow-hidden sm:border-gray-300 sm:dark:border-neutral-700 sm:rounded-sm sm:border-t-0 sm:border-b-1 sm:border-l-0 sm:border-r-0 sm:border rounded-sm border-t-0 border-b-1 border-l-0 border-r-0 border">
+                    <div
+                        class="border-gray-300 dark:border-neutral-700 dark:text-neutral-200 overflow-hidden sm:border-gray-300 sm:dark:border-neutral-700 sm:rounded-sm sm:border-t-0 sm:border-b-1 sm:border-l-0 sm:border-r-0 sm:border rounded-sm border-t-0 border-b-1 border-l-0 border-r-0 border">
                         <div class="p-4 pt-2 sm:px-6 ck-content">
                             <Link :href="route('blog.show.with.slug', [blog.slug])">
-                                <div class="mb-3">
-                                    <p class="hover:text-red-500 dark:hover:text-red-400 text-xl font-bold">>> {{ blog.name }}</p>
-                                    <p class="text-xxs italic text-left text-neutral-600 ">
+                            <div class="mb-3">
+                                <p class="hover:text-red-500 dark:hover:text-red-400 text-xl font-bold">>> {{ blog.name
+                                    }}</p>
+                                <p class="text-xxs italic text-left text-neutral-600 ">
                                     Published at {{
                                         blog.published_at
-                                    }}   by {{ blog.user.name }}
-                                    </p>
-                                </div>
+                                    }} by {{ blog.user.name }}
+                                </p>
+                            </div>
                             </Link>
                             <div v-html="blog.content.slice(0, 300) + (blog.content.length > 300 ? '...' : '')"></div>
                         </div>
@@ -81,7 +83,7 @@ export default {
     },
     data() {
         return {
-             images: [
+            images: [
                 '/img/banner (1).png',
                 '/img/banner (2).png',
                 '/img/banner (3).png',
@@ -151,10 +153,10 @@ export default {
         Head,
     },
     computed: {
-/*          randomImage() {
-            const index = Math.floor(Math.random() * this.images.length)
-            return this.images[index]
-        } */
+        /*          randomImage() {
+                    const index = Math.floor(Math.random() * this.images.length)
+                    return this.images[index]
+                } */
     },
     methods: {
         toggle() {
@@ -169,19 +171,27 @@ export default {
             }
         },
         getInitialBlogs() {
-            this.axios.get(`blog/all?skip=${0}&take=${this.take}`).then((response) => {
+            // Build URL with template literal
+            const url = `/blog/search/all?skip=${0}&take=${this.take}`;
+
+            this.axios.get(url).then((response) => {
                 this.blogs = response.data.blogs;
+            }).catch(error => {
+                console.error('Error fetching blogs:', error);
             });
         },
         getNextBlog() {
             window.onscroll = () => {
                 const blogsContainer = document.getElementById("blogs-container");
                 let bottomOfblogsContainer = window.innerHeight + window.pageYOffset >= blogsContainer.offsetTop + blogsContainer.offsetHeight;
-                //let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight;
+
                 if (bottomOfblogsContainer && !this.stop && !this.isLoading) {
                     this.isLoading = true;
                     setTimeout(() => {
-                        axios.get(`blog/all?skip=${this.start}&take=${this.take}`).then(response => {
+                        // Build URL with template literal
+                        const url = `/blog/search/all?skip=${this.start}&take=${this.take}`;
+
+                        axios.get(url).then(response => {
                             this.blogs.push(...response.data.blogs);
                             this.start = this.start + this.take;
                             if (response.data.blogs.length === 0) {
@@ -192,7 +202,7 @@ export default {
                     }, Math.floor(Math.random() * (800 - 300 + 1) + 300))
                 }
             }
-        },
+        }
     },
 };
 </script>

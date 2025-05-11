@@ -4,17 +4,18 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Blog;
 use Inertia\Inertia;
+use App\Models\Category;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\StoreBlogRequest;
 use App\Services\BlogService;
 use App\Services\ImageService;
-use Illuminate\Support\Facades\Storage;
-use Intervention\Image\ImageManagerStatic;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\StoreBlogRequest;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\UpdateBlogRequest;
+use Intervention\Image\ImageManagerStatic;
 
 class BlogController extends Controller
 {
@@ -25,13 +26,16 @@ class BlogController extends Controller
      */
     public function index()
     {
-        $blogs = Blog::where('user_id', Auth::user()->id)->whereIn('status', [0, 1, 2])->orderBy("created_at", 'desc');
+        $blogs = Blog::where('user_id', Auth::user()->id)->whereIn('status', [0, 1, 2])->with(['user', 'categories'])->orderBy("created_at", 'desc');
+
         $search = "";
         if (request()->has("search")) {
             $search = request("search");
             $blogs = $blogs->where('name', 'like', '%' . $search . '%')->where('user_id', Auth::user()->id);
         }
+
         $blogs = $blogs->paginate(10)->appends(request()->except("page"));
+
         return Inertia::render('Blog/Index', compact('blogs', 'search'));
     }
 
@@ -49,7 +53,10 @@ class BlogController extends Controller
                 'content' => '',
                 'slug' => '',
             ]);
-            return Inertia::render('Blog/Create', compact('blog'));
+
+            $categories = Category::where('status', 1)->get();
+
+            return Inertia::render('Blog/Create', compact('blog', 'categories'));
         } catch (\Throwable $th) {
             dd($th->getMessage());
         }
@@ -66,7 +73,7 @@ class BlogController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Blog  $blog
      * @return \Illuminate\Http\Response
      */
     public function show(Blog $blog)
@@ -77,12 +84,16 @@ class BlogController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Blog  $blog
      * @return \Illuminate\Http\Response
      */
     public function edit(Blog $blog)
     {
-        return Inertia::render('Blog/Edit', compact('blog'));
+        $categories = Category::where('status', 1)->get();
+
+        $blog->load('categories'); // Load the blog's categories
+
+        return Inertia::render('Blog/Edit', compact('blog', 'categories'));
     }
 
     /**
@@ -96,6 +107,7 @@ class BlogController extends Controller
     {
         try {
             $blog = Blog::findOrFail(request('blog'));
+
             $blog->update([
                 'name' => $request->name,
                 'content' => $request->content,
@@ -104,6 +116,9 @@ class BlogController extends Controller
                 'published_at' => $request->date,
                 'highlight' => $request->highlight,
             ]);
+
+            $blog->categories()->sync($request->categories);
+
             return redirect()->route('blog.index');
         } catch (\Throwable $th) {
             dd($th->getMessage());
@@ -120,16 +135,22 @@ class BlogController extends Controller
     {
         try {
             if (env('FILESYSTEM_DISK') == 's3') {
+
                 $folderPath = env('AWS_UPLOAD_FOLDER') . '/' . $blog->id;
+
                 if (Storage::disk('s3')->exists($folderPath)) {
                     Storage::disk('s3')->deleteDirectory($folderPath);
                 }
             } else {
+
                 $folderPath = 'public/blog/' . $blog->id;
+
                 if (Storage::exists($folderPath)) {
                     Storage::deleteDirectory($folderPath);
                 }
             }
+
+            $blog->categories()->detach();
 
             $blog->delete();
 
@@ -139,6 +160,12 @@ class BlogController extends Controller
         }
     }
 
+    /**
+     * Upload an image to the server.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function upload(Request $request)
     {
         return response()->json([
@@ -148,7 +175,7 @@ class BlogController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Toggle the highlight status of the specified resource.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -158,13 +185,17 @@ class BlogController extends Controller
     {
         try {
             if (auth()->user()->id == $blog->user_id) {
+
                 if ($blog->highlight == 1) {
                     $blog->highlight = 0;
                 } else {
                     $blog->highlight = 1;
                 }
+
                 $blog->timestamps = false;
+
                 $blog->save();
+
                 return redirect()->back();
             }
         } catch (\Throwable $th) {
@@ -183,13 +214,17 @@ class BlogController extends Controller
     {
         try {
             if (auth()->user()->id == $blog->user_id) {
+
                 if ($blog->status == 2) {
                     $blog->status = 1;
                 } else {
                     $blog->status = 2;
                 }
+
                 $blog->timestamps = false;
+
                 $blog->save();
+
                 return redirect()->back();
             }
         } catch (\Throwable $th) {

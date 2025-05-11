@@ -6,6 +6,17 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Default category
+    |--------------------------------------------------------------------------
+    |
+    | This value is the default category for your application. This value is used
+    | to show a default category at the welcome page.
+    */
+
+    'default_category' => env('DEFAULT_CATEGORY', 'cbpw'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Name
     |--------------------------------------------------------------------------
     |

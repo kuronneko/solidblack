@@ -11,7 +11,8 @@
                     <Link :href="route('blog.index')">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-6 h-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
                     </svg>
                     </Link>
                 </div>
@@ -58,6 +59,23 @@
                             <ckeditor :config="config" :editor="editor" v-model="form.content" class="ck-content"
                                 :class="v$.form.content.$error === true ? 'border-gray-300 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50 rounded-md shadow-sm' : ''">
                             </ckeditor>
+
+                            <div class="mt-4 mb-4">
+                                <InputLabel value="Categories" />
+                                <div class="mt-1 grid grid-cols-4 gap-2">
+                                    <label v-for="category in categories" :key="category.id"
+                                        class="inline-flex items-center py-1">
+                                        <input type="checkbox" :value="category.id" v-model="form.categories" class="w-4 h-4 text-neutral-600 bg-gray-100 border-gray-300
+                          rounded focus:ring-neutral-500 dark:focus:ring-neutral-600
+                          dark:ring-offset-gray-800 focus:ring-2 dark:bg-neutral-700
+                          dark:border-gray-600">
+                                        <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">
+                                            {{ category.name }}
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+
                             <PrimaryButton v-if="isLoading === false" type="submit" id="submitBtn"
                                 class="w-full rounded-none justify-center dark:bg-neutral-800">
                                 Post
@@ -98,6 +116,7 @@ import { required, url } from '@vuelidate/validators'
 export default {
     props: {
         blog: Object,
+        categories: Object,
     },
     setup() {
         return { v$: useVuelidate() }
@@ -111,6 +130,7 @@ export default {
                 status: 2,
                 highlight: false,
                 date: '',
+                categories: [],
             },
             options: [
                 { text: 'Inactive', value: 1 },
@@ -163,6 +183,7 @@ export default {
                 name: { required, $autoDirty: true },
                 content: { required, $autoDirty: true },
                 date: { required, $autoDirty: true },
+                //categoties: { required, $autoDirty: true },
             }
         }
     },

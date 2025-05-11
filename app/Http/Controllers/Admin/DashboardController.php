@@ -87,6 +87,11 @@ class DashboardController extends Controller
         //
     }
 
+    /**
+     * Clear unposted blogs.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function clearBlogs()
     {
         try {
@@ -117,6 +122,11 @@ class DashboardController extends Controller
         }
     }
 
+    /**
+     * Get the count of unposted blogs.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function getUnpostedBlogs()
     {
         try {
@@ -130,6 +140,11 @@ class DashboardController extends Controller
         }
     }
 
+    /**
+     * Get the status of the setting.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function getStatus()
     {
         try {
@@ -139,6 +154,11 @@ class DashboardController extends Controller
         }
     }
 
+    /**
+     * Update the status of the setting.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function updateStatus()
     {
         try {

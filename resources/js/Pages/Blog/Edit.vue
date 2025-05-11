@@ -30,7 +30,8 @@
                                     <div class="flex items-end justify-end mb-2">
                                         <label for="default-checkbox"
                                             class="mr-2 text-sm font-medium text-gray-900 dark:text-gray-300">Highlight</label>
-                                        <input id="default-checkbox" type="checkbox" v-model="form.highlight" :checked="form.highlight === 1"
+                                        <input id="default-checkbox" type="checkbox" v-model="form.highlight"
+                                            :checked="form.highlight === 1"
                                             class="w-4 h-4 text-neutral-600 bg-gray-100 border-gray-300 rounded focus:ring-neutral-500 dark:focus:ring-neutral-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-neutral-700 dark:border-gray-600">
                                     </div>
                                 </div>
@@ -60,6 +61,23 @@
                             <ckeditor :config="config" :editor="editor" v-model="form.content" class="ck-content"
                                 :class="v$.form.content.$error === true ? 'border-gray-300 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50 rounded-md shadow-sm' : ''">
                             </ckeditor>
+
+                            <div class="mt-4 mb-4">
+                                <InputLabel value="Categories" />
+                                <div class="mt-1 grid grid-cols-4 gap-2">
+                                    <label v-for="category in categories" :key="category.id"
+                                        class="inline-flex items-center py-1">
+                                        <input type="checkbox" :value="category.id" v-model="form.categories" class="w-4 h-4 text-neutral-600 bg-gray-100 border-gray-300
+                          rounded focus:ring-neutral-500 dark:focus:ring-neutral-600
+                          dark:ring-offset-gray-800 focus:ring-2 dark:bg-neutral-700
+                          dark:border-gray-600">
+                                        <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">
+                                            {{ category.name }}
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+
                             <PrimaryButton v-if="isLoading === false" type="submit" id="submitBtn"
                                 class="w-full rounded-none justify-center dark:bg-neutral-800">
                                 Edit
@@ -100,6 +118,7 @@ import { required, url } from '@vuelidate/validators'
 export default {
     props: {
         blog: Object,
+        categories: Object,
     },
     setup() {
         return { v$: useVuelidate() }
@@ -112,6 +131,7 @@ export default {
                 status: this.blog.status,
                 date: new Date(this.blog.published_at).toISOString().slice(0, 16),
                 highlight: null,
+                categories: this.blog.categories?.map(c => c.id) || [], // Add this field
             },
             options: [
                 { text: 'Inactive', value: 1 },
@@ -129,18 +149,18 @@ export default {
                 ckfinder: {
                     // uploadUrl: '/image-upload?_token='+$("input[name='_token']").val(),
                     uploadUrl: '/admin/blog/upload?blog=' + this.blog.id + '&_token=' + document.querySelector("input[name='_token']").value,
-/*                     headers: {
-                        'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content
-                    } */
+                    /*                     headers: {
+                                            'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content
+                                        } */
                 },
             },
         };
     },
-/*     watch: {
-        'blog.highlight': function (newVal) {
-            this.form.highlight = newVal;
-        },
-    }, */
+    /*     watch: {
+            'blog.highlight': function (newVal) {
+                this.form.highlight = newVal;
+            },
+        }, */
     mounted() {
         this.form.highlight = this.blog.highlight; // set initial value
     },
@@ -150,6 +170,7 @@ export default {
                 name: { required, $autoDirty: true },
                 content: { required, $autoDirty: true },
                 date: { required, $autoDirty: true },
+                //categories: { required, $autoDirty: true }, // Add this
             }
         }
     },

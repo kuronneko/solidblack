@@ -11,6 +11,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Request;
 use Stevebauman\Location\Facades\Location;
 use App\Http\Controllers\Admin\BlogController;
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Web\BlogController as WebBlogController;
 
@@ -27,12 +28,14 @@ use App\Http\Controllers\Web\BlogController as WebBlogController;
 
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',])->group(function () {
     Route::prefix('admin')->group(function () {
+
         Route::controller(BlogController::class)->group(function () {
             Route::resource('blog', BlogController::class);
             Route::post('blog/upload', [BlogController::class, 'upload'])->name('blog.upload');
             Route::put('blog/toggle-status/{blog}', [BlogController::class, 'toggleStatus'])->name('blog.toggle.status');
             Route::put('blog/toggle-highlight/{blog}', [BlogController::class, 'toggleHighlight'])->name('blog.toggle.highlight');
         });
+
         Route::controller(DashboardController::class)->group(function () {
             Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
             Route::delete('dashboard/clear-blogs', [DashboardController::class, 'clearBlogs'])->name('dashboard.clear.blogs');
@@ -41,10 +44,16 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
             Route::get('dashboard/get-status', [DashboardController::class, 'getStatus'])->name('dashboard.get.status');
             Route::put('dashboard/update-status', [DashboardController::class, 'updateStatus'])->name('dashboard.update.status');
         });
+
+        Route::controller(CategoryController::class)->group(function () {
+            Route::resource('categories', CategoryController::class);
+            Route::put('categories/{id}/toggle-status', 'toggleStatus')->name('categories.toggle.status');
+        });
     });
 });
 
 Route::controller(WebBlogController::class)->group(function () {
+
     Route::get('/', function () {
         return Inertia::render('Welcome', [
             'canLogin' => Route::has('login'),
@@ -54,7 +63,18 @@ Route::controller(WebBlogController::class)->group(function () {
             'setting' => Setting::first(),
         ]);
     })->name('welcome');
-    Route::get('{slug}', [WebBlogController::class, 'showWithSlug'])->name('blog.show.with.slug');
-    Route::get('blog/all', [WebBlogController::class, 'getAllBlogs'])->name('blog.all');
-});
 
+/*     Route::get('category/{category}', function () {
+        return Inertia::render('WelcomeCategory', [
+            'canLogin' => Route::has('login'),
+            'canRegister' => Route::has('register'),
+            'laravelVersion' => Application::VERSION,
+            'phpVersion' => PHP_VERSION,
+            'setting' => Setting::first(),
+            'category' => null // Explicitly set null for home
+        ]);
+    })->name('welcome.category'); */
+
+    Route::get('{slug}', [WebBlogController::class, 'showWithSlug'])->name('blog.show.with.slug');
+    Route::get('blog/search/all', [WebBlogController::class, 'getAllBlogs'])->name('blog.all');
+});
