@@ -86,8 +86,8 @@ class ImageService
 
         // Generate the CDN link
         $cdnLink = str_replace(
-            'nyc3.digitaloceanspaces.com',
-            'nyc3.cdn.digitaloceanspaces.com',
+            env('AWS_DEFAULT_REGION') . '.digitaloceanspaces.com',
+            env('AWS_DEFAULT_REGION') . '.cdn.digitaloceanspaces.com',
             Storage::disk('s3')->url($s3Path)
         );
 

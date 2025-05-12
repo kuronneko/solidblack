@@ -23,17 +23,37 @@ class BlogController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function getAllBlogs()
+    public function getAllBlogs(Request $request)
     {
-        if(Auth::user()){
-            return response()->json([
-                'blogs' => Blog::with(['user'])->whereIn('status', [1, 2])->orderBy('created_at', 'desc')->skip(request('skip'))->take(request('take'))->get(),
-            ]);
-        }else{
-            return response()->json([
-                'blogs' => Blog::with(['user'])->where('status', 2)->orderBy('created_at', 'desc')->skip(request('skip'))->take(request('take'))->get(),
-            ]);
+        $query = Blog::with(['user', 'categories']);
+
+        // Check if any category is requested
+        if ($request->category) {
+            $query->whereHas('categories', function ($q) use ($request) {
+                $q->where('slug', $request->category);
+            });
+        } else {
+            $query->where(function ($q) {
+                $q->whereDoesntHave('categories')
+                    ->orWhereHas('categories', function ($query) {
+                        $query->where('slug', config('app.default_category'));
+                    });
+            });
         }
+
+        // Handle authentication status
+        if (Auth::user()) {
+            $query->whereIn('status', [1, 2]);
+        } else {
+            $query->where('status', 2);
+        }
+
+        return response()->json([
+            'blogs' => $query->orderBy('created_at', 'desc')
+                ->skip(request('skip'))
+                ->take(request('take'))
+                ->get()
+        ]);
     }
 
     /**
@@ -44,8 +64,18 @@ class BlogController extends Controller
      */
     public function showWithSlug($slug)
     {
-        $blog = Blog::with(['user'])->where('slug', $slug)->first();
+        $query = Blog::with(['user', 'categories']);
+
+        if (Auth::user()) {
+            $query->whereIn('status', [1, 2]);
+        } else {
+            $query->where('status', 2);
+        }
+
+        $blog = $query->where('slug', $slug)->first();
+
         $setting = Setting::first();
+
         if (!$blog) {
             abort(404);
         } else {

@@ -23,18 +23,11 @@
                             <Link :href="route('blog.show.with.slug', [blog.slug])">
                             <div class="mb-3">
                                 <p class="hover:text-red-500 dark:hover:text-red-400 text-xl font-bold">>> {{ blog.name
-                                }}</p>
+                                    }}</p>
                                 <p class="text-xxs italic text-left text-neutral-600 ">
                                     Published at {{
                                         blog.published_at
                                     }} by {{ blog.user.name }}
-                                </p>
-                                <p v-if="blog.categories && blog.categories.length"
-                                    class="text-xxs italic text-left text-neutral-600">
-                                    <span>Categories: </span>
-                                    <span v-for="(category, index) in blog.categories" :key="category.id">
-                                        {{ category.name }}{{ index !== blog.categories.length - 1 ? ', ' : '' }}
-                                    </span>
                                 </p>
                             </div>
                             </Link>
@@ -87,9 +80,15 @@ export default {
         laravelVersion: String,
         phpVersion: String,
         setting: Object,
+        localCategory: {
+            type: String,
+            required: false,
+            default: null
+        },
     },
     data() {
         return {
+            localCategory: null, // Add this line
             images: [
                 '/img/banner (1).png',
                 '/img/banner (2).png',
@@ -122,6 +121,9 @@ export default {
         };
     },
     beforeMount() {
+        // Get category from route parameters
+        this.localCategory = this.$page.url.split('/').filter(Boolean)[0];
+
         this.getInitialBlogs();
     },
     mounted() {
@@ -179,7 +181,7 @@ export default {
         },
         getInitialBlogs() {
             // Build URL with template literal
-            const url = `/blog/search/all?skip=${0}&take=${this.take}`;
+            const url = `/blog/search/all?skip=${0}&take=${this.take}${this.localCategory ? `&category=${this.localCategory}` : ''}`;
 
             this.axios.get(url).then((response) => {
                 this.blogs = response.data.blogs;
@@ -196,7 +198,7 @@ export default {
                     this.isLoading = true;
                     setTimeout(() => {
                         // Build URL with template literal
-                        const url = `/blog/search/all?skip=${this.start}&take=${this.take}`;
+                        const url = `/blog/search/all?skip=${this.start}&take=${this.take}${this.localCategory ? `&category=${this.localCategory}` : ''}`;
 
                         axios.get(url).then(response => {
                             this.blogs.push(...response.data.blogs);

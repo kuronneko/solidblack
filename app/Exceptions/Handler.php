@@ -4,6 +4,11 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use Illuminate\Http\Response;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class Handler extends ExceptionHandler
 {
@@ -38,13 +43,52 @@ class Handler extends ExceptionHandler
 
     /**
      * Register the exception handling callbacks for the application.
-     *
-     * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+
+    protected function unauthenticated($request, AuthenticationException $exception)
+    {
+        if ($request->expectsJson()) {
+            return response()->fail(
+                developerMessage: 'No autenticado.',
+                userMessage: 'No autenticado.',
+                httpCode: 401
+            );
+        }
+    }
+
+    /**
+     * Render an exception into an HTTP response.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Throwable  $exception
+     * @return \Illuminate\Http\Response
+     */
+    public function render($request, Throwable $exc)
+    {
+        if ($exc instanceof ModelNotFoundException) {
+            return response()->fail(
+                developerMessage: "Recurso no encontrado: {$exc->getMessage()}",
+                userMessage: 'Hubo un problema al obtener la información. Inténtalo más tarde.',
+                httpCode: 404
+            );
+        }
+
+        if ($exc instanceof ValidationException) {
+            $errors = $exc->validator->errors()->getMessages();
+            return response()->error(
+                data: $errors,
+                developerMessage: 'Validation Error',
+                userMessage: 'Debes completar correctamente los campos del formulario.',
+                httpCode: 422
+            );
+        }
+
+        return parent::render($request, $exc);
     }
 }

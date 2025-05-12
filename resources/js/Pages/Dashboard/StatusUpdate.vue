@@ -97,7 +97,7 @@ onMounted(() => {
         </template>
 
         <template #description>
-            Update status.
+            Update your status.
         </template>
 
         <template #content>
