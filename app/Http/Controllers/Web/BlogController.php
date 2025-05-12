@@ -27,24 +27,25 @@ class BlogController extends Controller
     {
         $query = Blog::with(['user', 'categories']);
 
-        // Check if any category is requested
-        if ($request->category) {
-            $query->whereHas('categories', function ($q) use ($request) {
-                $q->where('slug', $request->category);
-            });
+        if (Auth::user()) {
+
+            if ($request->category) {
+                $query->whereHas('categories', function ($q) use ($request) {
+                    $q->where('slug', $request->category);
+                });
+            }
+
+            $query->whereIn('status', [1, 2]);
+
         } else {
+
             $query->where(function ($q) {
                 $q->whereDoesntHave('categories')
                     ->orWhereHas('categories', function ($query) {
                         $query->where('slug', config('app.default_category'));
                     });
             });
-        }
 
-        // Handle authentication status
-        if (Auth::user()) {
-            $query->whereIn('status', [1, 2]);
-        } else {
             $query->where('status', 2);
         }
 
