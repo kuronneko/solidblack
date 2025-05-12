@@ -360,9 +360,9 @@ const showToast = (title, message, icon = 'success') => {
                 </template>
 
                 <template #footer>
-                    <SecondaryButton @click="showModal = false">
+                    <PrimaryButton @click="showModal = false">
                         Cancel
-                    </SecondaryButton>
+                    </PrimaryButton>
 
                     <PrimaryButton class="ml-3" :class="{ 'opacity-25': form.processing }" :disabled="form.processing"
                         @click="submitForm">
