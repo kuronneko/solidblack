@@ -80,6 +80,12 @@ class Handler extends ExceptionHandler
         }
 
         if ($exc instanceof ValidationException) {
+            // If it's an Inertia request, let Inertia handle it
+            if ($request->header('X-Inertia')) {
+                return parent::render($request, $exc);
+            }
+
+            // For API requests, use your custom response format
             $errors = $exc->validator->errors()->getMessages();
             return response()->error(
                 data: $errors,
