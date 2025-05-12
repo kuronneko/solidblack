@@ -23,11 +23,18 @@
                             <Link :href="route('blog.show.with.slug', [blog.slug])">
                             <div class="mb-3">
                                 <p class="hover:text-red-500 dark:hover:text-red-400 text-xl font-bold">>> {{ blog.name
-                                    }}</p>
+                                }}</p>
                                 <p class="text-xxs italic text-left text-neutral-600 ">
                                     Published at {{
                                         blog.published_at
                                     }} by {{ blog.user.name }}
+                                </p>
+                                <p v-if="blog.categories && blog.categories.length"
+                                    class="text-xxs italic text-left text-neutral-600">
+                                    <span>Categories: </span>
+                                    <span v-for="(category, index) in blog.categories" :key="category.id">
+                                        {{ category.name }}{{ index !== blog.categories.length - 1 ? ', ' : '' }}
+                                    </span>
                                 </p>
                             </div>
                             </Link>
