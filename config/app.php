@@ -230,4 +230,5 @@ return [
         'Image' => Intervention\Image\Facades\Image::class,
     ])->toArray(),
 
+    'api_key' => env('API_KEY'),
 ];
