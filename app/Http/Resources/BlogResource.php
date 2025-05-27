@@ -24,6 +24,7 @@ class BlogResource extends JsonResource
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'categories' => CategoryResource::collection($this->categories),
+            'metadata' => $this->metadata,
         ];
     }
 }

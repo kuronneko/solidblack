@@ -78,6 +78,9 @@ class BlogController extends Controller
      */
     public function show(Blog $blog)
     {
+        // Load both the categories and user relationships
+        $blog->load(['categories', 'user']);
+
         return Inertia::render('Blog/Show', compact('blog'));
     }
 
@@ -115,6 +118,7 @@ class BlogController extends Controller
                 'status' => $request->status,
                 'published_at' => $request->date,
                 'highlight' => $request->highlight,
+                'metadata' => $request->metadata,
             ]);
 
             $blog->categories()->sync($request->categories);

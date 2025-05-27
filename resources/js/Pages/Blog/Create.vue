@@ -76,6 +76,28 @@
                                 </div>
                             </div>
 
+                            <div class="mb-3">
+                                <div class="flex justify-between items-center mb-1">
+                                    <InputLabel for="meta-description" value="Meta Description" />
+                                    <button
+                                        type="button"
+                                        @click="setDefaultMetadata"
+                                        class="text-xs bg-gray-200 hover:bg-gray-300 text-gray-800 py-1 px-2 rounded dark:bg-neutral-700 dark:hover:bg-neutral-600 dark:text-gray-200"
+                                    >
+                                        Set Default Metadata
+                                    </button>
+                                </div>
+                                <textarea
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5 dark:bg-neutral-800 dark:border-neutral-800 dark:placeholder-neutral-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500"
+                                    id="meta-description"
+                                    v-model="form.metadata"
+                                    rows="6">
+                                </textarea>
+                                <p class="text-xs text-gray-500 mt-1 dark:text-gray-400">
+                                    Enter metadata in JSON format for SEO optimization
+                                </p>
+                            </div>
+
                             <PrimaryButton v-if="isLoading === false" type="submit" id="submitBtn"
                                 class="w-full rounded-none justify-center dark:bg-neutral-800">
                                 Post
@@ -131,6 +153,7 @@ export default {
                 highlight: false,
                 date: '',
                 categories: [],
+                metadata: '',
             },
             options: [
                 { text: 'Inactive', value: 1 },
@@ -195,6 +218,41 @@ export default {
         Link,
     },
     methods: {
+        setDefaultMetadata() {
+            // Create ordered metadata object with all the SEO properties
+            const defaultMetadata = {};
+
+            // Basic SEO metadata
+            defaultMetadata.title = "CBPW Blog";
+            defaultMetadata.description = "CBPW Blog - Artículos y tutoriales sobre tecnología, desarrollo web y programación. Explora nuestro contenido y aprende con CBPW.";
+            defaultMetadata.keywords = "CBPW Blog, tecnología, desarrollo web, programación, javascript, php, laravel, vue, tutoriales, código, software, desarrollo, fullstack";
+            defaultMetadata.canonical = "https://blog.cyberpunkwaifus.xyz/";
+
+            // Open Graph metadata
+            defaultMetadata.og_title = "CBPW Blog";
+            defaultMetadata.og_description = "CBPW Blog - Artículos y tutoriales sobre tecnología, desarrollo web y programación. Explora nuestro contenido y aprende con CBPW.";
+            defaultMetadata.og_url = "https://blog.cyberpunkwaifus.xyz/";
+            defaultMetadata.og_type = "website";
+            defaultMetadata.og_site_name = "CBPW Tech";
+            defaultMetadata.og_image = "https://blog.cyberpunkwaifus.xyz/logo.png";
+
+            // Twitter Card metadata
+            defaultMetadata.twitter_title = "CBPW Blog";
+            defaultMetadata.twitter_description = "CBPW Blog - Artículos y tutoriales sobre tecnología, desarrollo web y programación. Explora nuestro contenido y aprende con CBPW.";
+            defaultMetadata.twitter_url = "https://blog.cyberpunkwaifus.xyz/";
+            defaultMetadata.twitter_type = "summary_large_image";
+            defaultMetadata.twitter_site = "@cbpw_tech";
+            defaultMetadata.twitter_image = "https://blog.cyberpunkwaifus.xyz/logo.png";
+
+            // JSON-LD metadata
+            defaultMetadata.jsonld_title = "CBPW Blog";
+            defaultMetadata.jsonld_description = "CBPW Blog - Artículos y tutoriales sobre tecnología, desarrollo web y programación. Explora nuestro contenido y aprende con CBPW.";
+            defaultMetadata.jsonld_url = "https://blog.cyberpunkwaifus.xyz/";
+            defaultMetadata.jsonld_type = "website";
+            defaultMetadata.jsonld_image = "https://blog.cyberpunkwaifus.xyz/logo.png";
+
+            this.form.metadata = JSON.stringify(defaultMetadata, null, 2);
+        },
         updateData(event) {
             this.content = event.editor.getData();
         },
