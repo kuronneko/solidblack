@@ -9,8 +9,12 @@ class Blog extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'name', 'content', 'slug', 'status', 'highlight', 'published_at'];
+    protected $fillable = ['user_id', 'name', 'content', 'slug', 'status', 'highlight', 'published_at', 'metadata'];
 
+    protected $casts = [
+        'metadata' => 'array',
+        // other casts...
+    ];
     //it belongs to user
     public function user()
     {

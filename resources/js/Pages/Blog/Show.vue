@@ -23,13 +23,23 @@
             <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white dark:bg-neutral-900 dark:text-neutral-200 overflow-hidden shadow-xl sm:rounded-lg">
                     <div class="p-4 sm:px-6 ck-content">
-                        <Link>
-                            <h3 class=" hover:text-blue-800 dark:hover:text-red-600">{{ blog.name }}</h3>
-                        </Link>
+                        <div class="mb-3">
+                            <p class="text-xl font-bold">>> {{ blog.name }}</p>
+                            <p class="text-xxs italic text-left text-neutral-600">
+                                Published at {{
+                                    blog.published_at
+                                }} by {{ blog.user.name }}
+                            </p>
+                            <p v-if="blog.categories && blog.categories.length"
+                                class="text-xxs italic text-left text-neutral-600">
+                                <span>Categories: </span>
+                                <span v-for="(category, index) in blog.categories" :key="category.id">
+                                    {{ category.name }}{{ index !== blog.categories.length - 1 ? ', ' : '' }}
+                                </span>
+                            </p>
+                        </div>
+
                         <div v-html="blog.content"></div>
-                        <p class="text-xs italic text-right mt-5 text-neutral-600 hover:text-blue-800 dark:hover:text-red-600">Published at {{
-                            moment(blog.published_at).format('MMMM Do YYYY, h:mm:ss a')
-                        }}</p>
                     </div>
                 </div>
             </div>
@@ -54,6 +64,7 @@ import "@fancyapps/ui/dist/fancybox.css";
 export default {
     props: {
         blog: Object,
+        categories: Object,
     },
     data() {
         return {

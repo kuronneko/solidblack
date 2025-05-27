@@ -78,6 +78,23 @@
                                 </div>
                             </div>
 
+                            <div class="mt-4 mb-4">
+                                <div class="flex justify-between items-center mb-1">
+                                    <InputLabel for="meta-description" value="Meta Description" />
+                                    <button type="button" @click="setDefaultMetadata"
+                                        class="text-xs bg-gray-200 hover:bg-gray-300 text-gray-800 py-1 px-2 rounded dark:bg-neutral-700 dark:hover:bg-neutral-600 dark:text-gray-200">
+                                        Set Default Metadata
+                                    </button>
+                                </div>
+                                <textarea
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5 dark:bg-neutral-800 dark:border-neutral-800 dark:placeholder-neutral-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500"
+                                    id="meta-description" v-model="form.metadata" rows="6">
+                        </textarea>
+                                <p class="text-xs text-gray-500 mt-1 dark:text-gray-400">
+                                    Enter metadata in JSON format for SEO optimization
+                                </p>
+                            </div>
+
                             <PrimaryButton v-if="isLoading === false" type="submit" id="submitBtn"
                                 class="w-full rounded-none justify-center dark:bg-neutral-800">
                                 Edit
@@ -131,7 +148,8 @@ export default {
                 status: this.blog.status,
                 date: new Date(this.blog.published_at).toISOString().slice(0, 16),
                 highlight: null,
-                categories: this.blog.categories?.map(c => c.id) || [], // Add this field
+                categories: this.blog.categories?.map(c => c.id) || [],
+                metadata: this.blog.metadata ? JSON.stringify(this.blog.metadata, null, 2) : ''
             },
             options: [
                 { text: 'Inactive', value: 1 },
@@ -140,29 +158,18 @@ export default {
             isLoading: false,
             isButtonDisabled: true,
             editor: ClassicEditor,
-            //editor: ClassicEditor.builtinPlugins.concat([ImageResize]),
             config: {
                 image: {
-                    //toolbar: ['imageTextAlternative'],
                     styles: ['full', 'side']
                 },
                 ckfinder: {
-                    // uploadUrl: '/image-upload?_token='+$("input[name='_token']").val(),
                     uploadUrl: '/admin/blog/upload?blog=' + this.blog.id + '&_token=' + document.querySelector("input[name='_token']").value,
-                    /*                     headers: {
-                                            'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content
-                                        } */
                 },
             },
         };
     },
-    /*     watch: {
-            'blog.highlight': function (newVal) {
-                this.form.highlight = newVal;
-            },
-        }, */
     mounted() {
-        this.form.highlight = this.blog.highlight; // set initial value
+        this.form.highlight = this.blog.highlight;
     },
     validations() {
         return {
@@ -170,7 +177,6 @@ export default {
                 name: { required, $autoDirty: true },
                 content: { required, $autoDirty: true },
                 date: { required, $autoDirty: true },
-                //categories: { required, $autoDirty: true }, // Add this
             }
         }
     },
@@ -182,20 +188,93 @@ export default {
         Link,
     },
     methods: {
+        setDefaultMetadata() {
+            // Create ordered metadata object with all the SEO properties
+            const defaultMetadata = {};
+
+            // Basic SEO metadata
+            defaultMetadata.title = "CBPW Blog";
+            defaultMetadata.description = "CBPW Blog - Artículos y tutoriales sobre tecnología, desarrollo web y programación. Explora nuestro contenido y aprende con CBPW.";
+            defaultMetadata.keywords = "CBPW Blog, tecnología, desarrollo web, programación, javascript, php, laravel, vue, tutoriales, código, software, desarrollo, fullstack";
+            defaultMetadata.canonical = "https://blog.cyberpunkwaifus.xyz/";
+
+            // Open Graph metadata
+            defaultMetadata.og_title = "CBPW Blog";
+            defaultMetadata.og_description = "CBPW Blog - Artículos y tutoriales sobre tecnología, desarrollo web y programación. Explora nuestro contenido y aprende con CBPW.";
+            defaultMetadata.og_url = "https://blog.cyberpunkwaifus.xyz/";
+            defaultMetadata.og_type = "website";
+            defaultMetadata.og_site_name = "CBPW Tech";
+            defaultMetadata.og_image = "https://blog.cyberpunkwaifus.xyz/logo.png";
+
+            // Twitter Card metadata
+            defaultMetadata.twitter_title = "CBPW Blog";
+            defaultMetadata.twitter_description = "CBPW Blog - Artículos y tutoriales sobre tecnología, desarrollo web y programación. Explora nuestro contenido y aprende con CBPW.";
+            defaultMetadata.twitter_url = "https://blog.cyberpunkwaifus.xyz/";
+            defaultMetadata.twitter_type = "summary_large_image";
+            defaultMetadata.twitter_site = "@cbpw_tech";
+            defaultMetadata.twitter_image = "https://blog.cyberpunkwaifus.xyz/logo.png";
+
+            // JSON-LD metadata
+            defaultMetadata.jsonld_title = "CBPW Blog";
+            defaultMetadata.jsonld_description = "CBPW Blog - Artículos y tutoriales sobre tecnología, desarrollo web y programación. Explora nuestro contenido y aprende con CBPW.";
+            defaultMetadata.jsonld_url = "https://blog.cyberpunkwaifus.xyz/";
+            defaultMetadata.jsonld_type = "website";
+            defaultMetadata.jsonld_image = "https://blog.cyberpunkwaifus.xyz/logo.png";
+
+            this.form.metadata = JSON.stringify(defaultMetadata, null, 2);
+        },
         updateData(event) {
             this.content = event.editor.getData();
+        },
+        validateMetadata() {
+            if (!this.form.metadata) {
+                return true; // Empty metadata is valid
+            }
+
+            try {
+                JSON.parse(this.form.metadata);
+                return true;
+            } catch (e) {
+                return false;
+            }
         },
         submitForm() {
             this.isLoading = true;
             document.getElementById("submitBtn").disabled = true;
+
             setTimeout(() => {
                 this.v$.$touch();
+
+                // Validate metadata JSON format
+                if (!this.validateMetadata()) {
+                    this.Toast().fire({
+                        icon: 'error',
+                        title: 'Invalid JSON in metadata field'
+                    });
+                    this.isLoading = false;
+                    document.getElementById("submitBtn").disabled = false;
+                    return;
+                }
+
                 if (!this.v$.$error) {
                     setTimeout(() => {
+                        // Process form data
+                        let formData = { ...this.form };
+
+                        // Parse metadata if it exists
+                        if (formData.metadata) {
+                            try {
+                                formData.metadata = JSON.parse(formData.metadata);
+                            } catch (e) {
+                                // This shouldn't happen since we already validated
+                                console.error("Error parsing metadata JSON:", e);
+                            }
+                        }
+
                         this.isLoading = false;
                         Inertia.post(route("blog.update", { 'blog': this.blog.id }),
                             {
-                                ...this.form,
+                                ...formData,
                                 _method: 'put',
                             },
                             {
@@ -214,7 +293,6 @@ export default {
                                 },
                             }
                         );
-                        //Inertia.post(route("blog.update", { 'blog': this.blog, 'title': this.form.title, 'content': this.form.content }));
                     }, 1000)
                 } else {
                     this.Toast().fire({
