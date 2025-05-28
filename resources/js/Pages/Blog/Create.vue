@@ -221,9 +221,7 @@ export default {
                     title: "CBPW Blog",
                     description: "CBPW Blog - Artículos y tutoriales sobre tecnología, desarrollo web y programación. Explora nuestro contenido y aprende con CBPW.",
                     keywords: "CBPW Blog, tecnología, desarrollo web, programación, javascript, php, laravel, vue, tutoriales, código, software, desarrollo, fullstack",
-                    canonical: "https://blog.cyberpunkwaifus.xyz/",
-                    robots: "index, follow",
-                    viewport: "width=device-width, initial-scale=1.0"
+                    canonical: "https://blog.cyberpunkwaifus.xyz/"
                 },
 
                 // Open Graph metadata section
