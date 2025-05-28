@@ -39,7 +39,11 @@ class BlogController extends Controller
                 })
                 ->skip(request('skip'))
                 ->take(request('take'))
-                ->orderBy('published_at', 'desc')
+                ->when(request('order') === 'random', function ($query) {
+                    return $query->inRandomOrder();
+                }, function ($query) {
+                    return $query->orderBy('published_at', request('order', 'desc'));
+                })
                 ->get();
 
             return response()->success(
@@ -72,7 +76,7 @@ class BlogController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-/*     public function show(Blog $blog, Category $category)
+    /*     public function show(Blog $blog, Category $category)
     {
         if (!$blog->categories->contains($category->id)) {
             return response()->fail(
