@@ -34,7 +34,7 @@ class BlogController extends Controller
             $blogs = $blogs->where('name', 'like', '%' . $search . '%')->where('user_id', Auth::user()->id);
         }
 
-        $blogs = $blogs->paginate(10)->appends(request()->except("page"));
+        $blogs = $blogs->paginate(50)->appends(request()->except("page"));
 
         return Inertia::render('Blog/Index', compact('blogs', 'search'));
     }
