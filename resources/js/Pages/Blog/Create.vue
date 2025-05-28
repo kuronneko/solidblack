@@ -79,20 +79,15 @@
                             <div class="mb-3">
                                 <div class="flex justify-between items-center mb-1">
                                     <InputLabel for="meta-description" value="Meta Description" />
-                                    <button
-                                        type="button"
-                                        @click="setDefaultMetadata"
-                                        class="text-xs bg-gray-200 hover:bg-gray-300 text-gray-800 py-1 px-2 rounded dark:bg-neutral-700 dark:hover:bg-neutral-600 dark:text-gray-200"
-                                    >
+                                    <button type="button" @click="setDefaultMetadata"
+                                        class="text-xs bg-gray-200 hover:bg-gray-300 text-gray-800 py-1 px-2 rounded dark:bg-neutral-700 dark:hover:bg-neutral-600 dark:text-gray-200">
                                         Set Default Metadata
                                     </button>
                                 </div>
                                 <textarea
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5 dark:bg-neutral-800 dark:border-neutral-800 dark:placeholder-neutral-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500"
-                                    id="meta-description"
-                                    v-model="form.metadata"
-                                    rows="6">
-                                </textarea>
+                                    id="meta-description" v-model="form.metadata" rows="6">
+                        </textarea>
                                 <p class="text-xs text-gray-500 mt-1 dark:text-gray-400">
                                     Enter metadata in JSON format for SEO optimization
                                 </p>
@@ -219,48 +214,83 @@ export default {
     },
     methods: {
         setDefaultMetadata() {
-            // Create ordered metadata object with all the SEO properties
-            const defaultMetadata = {};
+            // Create structured metadata with sections as arrays
+            const defaultMetadata = {
+                // Basic SEO metadata section
+                basic: {
+                    title: "CBPW Blog",
+                    description: "CBPW Blog - Artículos y tutoriales sobre tecnología, desarrollo web y programación. Explora nuestro contenido y aprende con CBPW.",
+                    keywords: "CBPW Blog, tecnología, desarrollo web, programación, javascript, php, laravel, vue, tutoriales, código, software, desarrollo, fullstack",
+                    canonical: "https://blog.cyberpunkwaifus.xyz/",
+                    robots: "index, follow",
+                    viewport: "width=device-width, initial-scale=1.0"
+                },
 
-            // Basic SEO metadata
-            defaultMetadata.title = "CBPW Blog";
-            defaultMetadata.description = "CBPW Blog - Artículos y tutoriales sobre tecnología, desarrollo web y programación. Explora nuestro contenido y aprende con CBPW.";
-            defaultMetadata.keywords = "CBPW Blog, tecnología, desarrollo web, programación, javascript, php, laravel, vue, tutoriales, código, software, desarrollo, fullstack";
-            defaultMetadata.canonical = "https://blog.cyberpunkwaifus.xyz/";
+                // Open Graph metadata section
+                openGraph: {
+                    title: "CBPW Blog",
+                    description: "CBPW Blog - Artículos y tutoriales sobre tecnología, desarrollo web y programación. Explora nuestro contenido y aprende con CBPW.",
+                    url: "https://blog.cyberpunkwaifus.xyz/",
+                    type: "website",
+                    site_name: "CBPW Tech",
+                    image: "https://blog.cyberpunkwaifus.xyz/logo.png"
+                },
 
-            // Open Graph metadata
-            defaultMetadata.og_title = "CBPW Blog";
-            defaultMetadata.og_description = "CBPW Blog - Artículos y tutoriales sobre tecnología, desarrollo web y programación. Explora nuestro contenido y aprende con CBPW.";
-            defaultMetadata.og_url = "https://blog.cyberpunkwaifus.xyz/";
-            defaultMetadata.og_type = "website";
-            defaultMetadata.og_site_name = "CBPW Tech";
-            defaultMetadata.og_image = "https://blog.cyberpunkwaifus.xyz/logo.png";
+                // Twitter Card metadata section
+                twitter: {
+                    title: "CBPW Blog",
+                    description: "CBPW Blog - Artículos y tutoriales sobre tecnología, desarrollo web y programación. Explora nuestro contenido y aprende con CBPW.",
+                    url: "https://blog.cyberpunkwaifus.xyz/",
+                    card: "summary_large_image",
+                    site: "@cbpw_tech",
+                    image: "https://blog.cyberpunkwaifus.xyz/logo.png"
+                },
 
-            // Twitter Card metadata
-            defaultMetadata.twitter_title = "CBPW Blog";
-            defaultMetadata.twitter_description = "CBPW Blog - Artículos y tutoriales sobre tecnología, desarrollo web y programación. Explora nuestro contenido y aprende con CBPW.";
-            defaultMetadata.twitter_url = "https://blog.cyberpunkwaifus.xyz/";
-            defaultMetadata.twitter_type = "summary_large_image";
-            defaultMetadata.twitter_site = "@cbpw_tech";
-            defaultMetadata.twitter_image = "https://blog.cyberpunkwaifus.xyz/logo.png";
-
-            // JSON-LD metadata
-            defaultMetadata.jsonld_title = "CBPW Blog";
-            defaultMetadata.jsonld_description = "CBPW Blog - Artículos y tutoriales sobre tecnología, desarrollo web y programación. Explora nuestro contenido y aprende con CBPW.";
-            defaultMetadata.jsonld_url = "https://blog.cyberpunkwaifus.xyz/";
-            defaultMetadata.jsonld_type = "website";
-            defaultMetadata.jsonld_image = "https://blog.cyberpunkwaifus.xyz/logo.png";
+                // JSON-LD metadata section
+                jsonLd: {
+                    title: "CBPW Blog",
+                    description: "CBPW Blog - Artículos y tutoriales sobre tecnología, desarrollo web y programación. Explora nuestro contenido y aprende con CBPW.",
+                    url: "https://blog.cyberpunkwaifus.xyz/",
+                    type: "website",
+                    image: "https://blog.cyberpunkwaifus.xyz/logo.png"
+                }
+            };
 
             this.form.metadata = JSON.stringify(defaultMetadata, null, 2);
         },
         updateData(event) {
             this.content = event.editor.getData();
         },
+        validateMetadata() {
+            if (!this.form.metadata) {
+                return true; // Empty metadata is valid
+            }
+
+            try {
+                JSON.parse(this.form.metadata);
+                return true;
+            } catch (e) {
+                return false;
+            }
+        },
         submitForm() {
             this.isLoading = true;
             document.getElementById("submitBtn").disabled = true;
+
             setTimeout(() => {
                 this.v$.$touch();
+
+                // Validate metadata JSON format
+                if (!this.validateMetadata()) {
+                    this.Toast().fire({
+                        icon: 'error',
+                        title: 'Invalid JSON in metadata field'
+                    });
+                    this.isLoading = false;
+                    document.getElementById("submitBtn").disabled = false;
+                    return;
+                }
+
                 if (!this.v$.$error) {
                     setTimeout(() => {
                         this.isLoading = false;

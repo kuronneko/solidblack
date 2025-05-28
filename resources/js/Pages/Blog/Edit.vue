@@ -149,7 +149,11 @@ export default {
                 date: new Date(this.blog.published_at).toISOString().slice(0, 16),
                 highlight: null,
                 categories: this.blog.categories?.map(c => c.id) || [],
-                metadata: this.blog.metadata ? JSON.stringify(this.blog.metadata, null, 2) : ''
+                metadata: this.blog.metadata ?
+                    (typeof this.blog.metadata === 'string' ?
+                        this.blog.metadata :
+                        JSON.stringify(this.blog.metadata, null, 2)
+                    ) : ''
             },
             options: [
                 { text: 'Inactive', value: 1 },
@@ -170,6 +174,21 @@ export default {
     },
     mounted() {
         this.form.highlight = this.blog.highlight;
+
+        // Ensure metadata is properly formatted for display
+        if (this.form.metadata) {
+            try {
+                // If it's already a string but not properly formatted
+                const parsedMetadata = typeof this.form.metadata === 'string'
+                    ? JSON.parse(this.form.metadata)
+                    : this.form.metadata;
+
+                // Re-stringify with proper formatting
+                this.form.metadata = JSON.stringify(parsedMetadata, null, 2);
+            } catch (e) {
+                console.error('Error formatting metadata:', e);
+            }
+        }
     },
     validations() {
         return {
@@ -189,37 +208,47 @@ export default {
     },
     methods: {
         setDefaultMetadata() {
-            // Create ordered metadata object with all the SEO properties
-            const defaultMetadata = {};
+            // Create structured metadata with sections as arrays
+            const defaultMetadata = {
+                // Basic SEO metadata section
+                basic: {
+                    title: "CBPW Blog",
+                    description: "CBPW Blog - Artículos y tutoriales sobre tecnología, desarrollo web y programación. Explora nuestro contenido y aprende con CBPW.",
+                    keywords: "CBPW Blog, tecnología, desarrollo web, programación, javascript, php, laravel, vue, tutoriales, código, software, desarrollo, fullstack",
+                    canonical: "https://blog.cyberpunkwaifus.xyz/",
+                    robots: "index, follow",
+                    viewport: "width=device-width, initial-scale=1.0"
+                },
 
-            // Basic SEO metadata
-            defaultMetadata.title = "CBPW Blog";
-            defaultMetadata.description = "CBPW Blog - Artículos y tutoriales sobre tecnología, desarrollo web y programación. Explora nuestro contenido y aprende con CBPW.";
-            defaultMetadata.keywords = "CBPW Blog, tecnología, desarrollo web, programación, javascript, php, laravel, vue, tutoriales, código, software, desarrollo, fullstack";
-            defaultMetadata.canonical = "https://blog.cyberpunkwaifus.xyz/";
+                // Open Graph metadata section
+                openGraph: {
+                    title: "CBPW Blog",
+                    description: "CBPW Blog - Artículos y tutoriales sobre tecnología, desarrollo web y programación. Explora nuestro contenido y aprende con CBPW.",
+                    url: "https://blog.cyberpunkwaifus.xyz/",
+                    type: "website",
+                    site_name: "CBPW Tech",
+                    image: "https://blog.cyberpunkwaifus.xyz/logo.png"
+                },
 
-            // Open Graph metadata
-            defaultMetadata.og_title = "CBPW Blog";
-            defaultMetadata.og_description = "CBPW Blog - Artículos y tutoriales sobre tecnología, desarrollo web y programación. Explora nuestro contenido y aprende con CBPW.";
-            defaultMetadata.og_url = "https://blog.cyberpunkwaifus.xyz/";
-            defaultMetadata.og_type = "website";
-            defaultMetadata.og_site_name = "CBPW Tech";
-            defaultMetadata.og_image = "https://blog.cyberpunkwaifus.xyz/logo.png";
+                // Twitter Card metadata section
+                twitter: {
+                    title: "CBPW Blog",
+                    description: "CBPW Blog - Artículos y tutoriales sobre tecnología, desarrollo web y programación. Explora nuestro contenido y aprende con CBPW.",
+                    url: "https://blog.cyberpunkwaifus.xyz/",
+                    card: "summary_large_image",
+                    site: "@cbpw_tech",
+                    image: "https://blog.cyberpunkwaifus.xyz/logo.png"
+                },
 
-            // Twitter Card metadata
-            defaultMetadata.twitter_title = "CBPW Blog";
-            defaultMetadata.twitter_description = "CBPW Blog - Artículos y tutoriales sobre tecnología, desarrollo web y programación. Explora nuestro contenido y aprende con CBPW.";
-            defaultMetadata.twitter_url = "https://blog.cyberpunkwaifus.xyz/";
-            defaultMetadata.twitter_type = "summary_large_image";
-            defaultMetadata.twitter_site = "@cbpw_tech";
-            defaultMetadata.twitter_image = "https://blog.cyberpunkwaifus.xyz/logo.png";
-
-            // JSON-LD metadata
-            defaultMetadata.jsonld_title = "CBPW Blog";
-            defaultMetadata.jsonld_description = "CBPW Blog - Artículos y tutoriales sobre tecnología, desarrollo web y programación. Explora nuestro contenido y aprende con CBPW.";
-            defaultMetadata.jsonld_url = "https://blog.cyberpunkwaifus.xyz/";
-            defaultMetadata.jsonld_type = "website";
-            defaultMetadata.jsonld_image = "https://blog.cyberpunkwaifus.xyz/logo.png";
+                // JSON-LD metadata section
+                jsonLd: {
+                    title: "CBPW Blog",
+                    description: "CBPW Blog - Artículos y tutoriales sobre tecnología, desarrollo web y programación. Explora nuestro contenido y aprende con CBPW.",
+                    url: "https://blog.cyberpunkwaifus.xyz/",
+                    type: "website",
+                    image: "https://blog.cyberpunkwaifus.xyz/logo.png"
+                }
+            };
 
             this.form.metadata = JSON.stringify(defaultMetadata, null, 2);
         },
