@@ -98,7 +98,7 @@ class DashboardController extends Controller
             $blogs = Blog::where('status', 0)->get();
 
             foreach ($blogs as $blog) {
-                if (env('FILESYSTEM_DISK') == 's3') {
+                if (config('filesystems.default')  == 's3') {
                     $folderPath = env('AWS_UPLOAD_FOLDER') . '/' . $blog->id;
                     if (Storage::disk('s3')->exists($folderPath)) {
                         Storage::disk('s3')->deleteDirectory($folderPath);

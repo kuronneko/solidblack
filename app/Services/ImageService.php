@@ -47,7 +47,7 @@ class ImageService
                 $mainFileName = md5($img->getClientOriginalName() . Str::random(4)) . '.' . $img->getClientOriginalExtension();
                 $thumbFileName = pathinfo($mainFileName, PATHINFO_FILENAME) . '_thumb.' . pathinfo($mainFileName, PATHINFO_EXTENSION);
 
-                if (env('FILESYSTEM_DISK') == 's3') {
+                if (config('filesystems.default')  == 's3') {
                     self::createTempFolder();
                     $mainImagePath = public_path('/storage/temp/' . $mainFileName);
                     $thumbImagePath = public_path('/storage/temp/' . $thumbFileName);
@@ -61,7 +61,7 @@ class ImageService
                 self::resizeImage($img)[0]->save($mainImagePath, 100);
                 self::resizeImage($img)[1]->save($thumbImagePath, 100);
 
-                if (env('FILESYSTEM_DISK') == 's3') {
+                if (config('filesystems.default')  == 's3') {
                     // Upload to S3 and delete local files
                     self::uploadImageToS3($mainImagePath, $mainFileName, $blogId);
                     return self::uploadImageToS3($thumbImagePath, $thumbFileName, $blogId);
