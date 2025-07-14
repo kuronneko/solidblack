@@ -3,18 +3,6 @@
 use Illuminate\Support\Facades\Facade;
 
 return [
-
-    /*
-    |--------------------------------------------------------------------------
-    | Default category
-    |--------------------------------------------------------------------------
-    |
-    | This value is the default category for your application. This value is used
-    | to show a default category at the welcome page.
-    */
-
-    'default_category' => env('DEFAULT_CATEGORY', 'cbpw'),
-
     /*
     |--------------------------------------------------------------------------
     | Application Name
@@ -230,5 +218,25 @@ return [
         'Image' => Intervention\Image\Facades\Image::class,
     ])->toArray(),
 
+    /*--------------------------------------------------------------------------
+    | API Key
+    |--------------------------------------------------------------------------
+    |
+    | This value is the API key used for external services. It should be set
+    | in your ".env" file to ensure security and flexibility.
+    |
+    */
+
     'api_key' => env('API_KEY'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Default category
+    |--------------------------------------------------------------------------
+    |
+    | This value is the default category for your application. This value is used
+    | to show a default category at the welcome page.
+    */
+
+    'default_category' => env('DEFAULT_CATEGORY'),
 ];
