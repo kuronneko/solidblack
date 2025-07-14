@@ -138,7 +138,7 @@ class BlogController extends Controller
     public function destroy(Blog $blog)
     {
         try {
-            if (env('FILESYSTEM_DISK') == 's3') {
+            if (config('filesystems.default') == 's3') {
 
                 $folderPath = env('AWS_UPLOAD_FOLDER') . '/' . $blog->id;
 
