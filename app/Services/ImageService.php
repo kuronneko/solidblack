@@ -61,7 +61,7 @@ class ImageService
                 self::resizeImage($img)[0]->save($mainImagePath, 100);
                 self::resizeImage($img)[1]->save($thumbImagePath, 100);
 
-                if (config('filesystems.default')  == 's3') {
+                if (config('filesystems.default') == 's3') {
                     // Upload to S3 and delete local files
                     self::uploadImageToS3($mainImagePath, $mainFileName, $blogId);
                     return self::uploadImageToS3($thumbImagePath, $thumbFileName, $blogId);
@@ -78,7 +78,7 @@ class ImageService
     {
         // Upload the image to S3
         $s3Path = Storage::putFileAs(
-            env('AWS_UPLOAD_FOLDER') . '/' . $blogId,
+            config('filesystems.disks.s3.upload_folder') . '/' . $blogId,
             new \Illuminate\Http\File($imagePath),
             $fileName,
             'public'
@@ -86,8 +86,8 @@ class ImageService
 
         // Generate the CDN link
         $cdnLink = str_replace(
-            env('AWS_DEFAULT_REGION') . '.digitaloceanspaces.com',
-            env('AWS_DEFAULT_REGION') . '.cdn.digitaloceanspaces.com',
+            config('filesystems.disks.s3.region') . '.digitaloceanspaces.com',
+            config('filesystems.disks.s3.region') . '.cdn.digitaloceanspaces.com',
             Storage::disk('s3')->url($s3Path)
         );
 

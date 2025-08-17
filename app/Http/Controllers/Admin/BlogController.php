@@ -140,7 +140,7 @@ class BlogController extends Controller
         try {
             if (config('filesystems.default') == 's3') {
 
-                $folderPath = env('AWS_UPLOAD_FOLDER') . '/' . $blog->id;
+                $folderPath = config('filesystems.disks.s3.upload_folder') . '/' . $blog->id;
 
                 if (Storage::disk('s3')->exists($folderPath)) {
                     Storage::disk('s3')->deleteDirectory($folderPath);
