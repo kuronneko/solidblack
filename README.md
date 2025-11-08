@@ -58,14 +58,67 @@ Edit `.env` and set database credentials and other settings (APP_URL, DB_*, MAIL
 
 ```bash
 php artisan key:generate
-php artisan migrate --seed
+php artisan migrate
 php artisan storage:link
 ```
 
-Default dev user (if seeder included):
+## Create a dev user (artisan tinker)
 
-- Username: `dev@example.com`
-- Password: `00000000`
+You can create a development user quickly using `artisan tinker`. The examples below create a user with email `dev@example.com` and password `password`. Change the values before running in any non-development environment.
+
+Interactive (recommended):
+
+```bash
+php artisan tinker
+```
+
+Then in the tinker REPL run:
+
+```php
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+use App\Models\Setting;
+
+// create a simple setting record
+Setting::create(['status' => 'Hola mundo']);
+
+User::create([
+	'name' => 'Dev',
+	'email' => 'dev@example.com',
+	'password' => Hash::make('password'),
+	'email_verified_at' => now(),
+]);
+```
+
+One-line (non-Docker):
+
+```bash
+php artisan tinker --execute "use App\\Models\\Setting; use App\\Models\\User; use Illuminate\\Support\\Facades\\Hash; Setting::create(['status'=>'Hola mundo']); User::create(['name'=>'Dev User','email'=>'dev@example.com','password'=>Hash::make('password'),'email_verified_at'=>now()]);"
+```
+
+One-line (Sail / Docker):
+
+```bash
+./vendor/bin/sail php artisan tinker --execute "use App\\Models\\Setting; use App\\Models\\User; use Illuminate\\Support\\Facades\\Hash; Setting::create(['status'=>'Hola mundo']); User::create(['name'=>'Dev User','email'=>'dev@example.com','password'=>Hash::make('password'),'email_verified_at'=>now()]);"
+```
+
+Verify the user (example):
+
+```bash
+php artisan tinker --execute "App\\Models\\User::where('email','dev@example.com')->first()->toArray();"
+
+Verify the setting (example):
+
+```bash
+php artisan tinker --execute "App\\Models\\Setting::first()->toArray();"
+```
+```
+
+Notes:
+
+- Don’t use these example credentials in production.
+- Ensure database migrations were run and DB settings in `.env` are correct before creating users.
+- If you use Sail, run the Sail variants so commands execute inside the containers.
 
 5. Install frontend dependencies and build
 
