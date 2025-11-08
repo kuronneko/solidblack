@@ -27,6 +27,7 @@ If you use Docker / Laravel Sail, you only need Docker Desktop / Docker Engine a
 - Private posts support
 - Image upload and storage (local & S3)
 - S3-compatible storage support (AWS, DigitalOcean Spaces, MinIO, etc.)
+ - Public REST API (v1) — blog listing endpoint with filtering/pagination and a Sanctum-protected user endpoint
 
 ## Preview
 
@@ -147,6 +148,35 @@ Ensure `config/filesystems.php` is configured for S3 (this repo already includes
 - Run seeders: `php artisan db:seed`
 - Run tests: `./vendor/bin/phpunit`
 - Sail artisan: `./vendor/bin/sail php artisan <command>`
+
+## API Endpoints (v1)
+
+Below are the public API endpoints currently available in this project. Paths are relative to your app base URL (for example: `https://example.test/api/v1/...`).
+
+- GET `/api/user`
+	- Auth: `auth:sanctum` (requires authenticated session or API token)
+	- Description: Returns the authenticated user's information.
+	- Success: 200 JSON user object.
+
+- GET `/api/v1/blogs`
+	- Auth: public (no auth required)
+	- Description: Retrieve blog posts filtered by category and paginated using `skip`/`take`.
+	- Query parameters:
+		- `categories` (required) — comma-separated list of category names (alphanumeric and commas only). Example: `categories=laravel,php`
+		- `skip` (optional, integer >= 0) — number of records to skip (offset).
+		- `take` (optional, integer 1-999) — number of records to return.
+		- `order` (optional) — ordering: `asc`, `desc` (default `desc`) or `random`.
+	- Response: success wrapper with `data` containing a collection of `BlogResource` objects (posts). On errors returns structured error/fail responses.
+	- Example request:
+
+```bash
+curl "http://localhost/api/v1/blogs?categories=tech,laravel&skip=0&take=10&order=desc"
+```
+
+Notes:
+
+- The `GetBlogRequest` request validation requires `categories` and validates `skip`/`take` numeric limits. `order` is handled in the controller (supports `random`).
+- The API controllers return a structured response using the project's response helpers (`response()->success`, `response()->fail`, `response()->error`). Check the controllers or `app/Http/Resources` for response shapes if you need exact field names.
 
 ## Notes
 
