@@ -1,0 +1,83 @@
+name: Deploy to DigitalOcean
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # --- 🧩 Build the Vue app before deploy ---
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 20
+
+    - name: Install frontend dependencies and build
+      run: |
+        npm ci
+        npm run build
+      # 👇 If your Vue output goes somewhere else, adjust this
+      # e.g. Vue 3 default: "dist"
+      # or Laravel+Vite: "public/build"
+
+    # --- 🔒 Set up SSH connection ---
+    - name: Set up SSH
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      run: |
+        mkdir -p ~/.ssh
+        echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan -H ${{ secrets.DIGITALOCEAN_HOST }} >> ~/.ssh/known_hosts
+
+    # --- 🚀 Deploy everything (including Vue build) ---
+    - name: Sync files to DigitalOcean
+      env:
+        USER: ${{ secrets.DIGITALOCEAN_USER }}
+        HOST: ${{ secrets.DIGITALOCEAN_HOST }}
+        PORT: ${{ secrets.DIGITALOCEAN_PORT }}
+        REMOTE_DIR: ${{ secrets.DIGITALOCEAN_REMOTE_DIR }}
+      run: |
+        rsync -avz \
+          --exclude=node_modules \
+          --exclude=storage \
+          --exclude=.env \
+          --exclude=.git \
+          --exclude=.github \
+          -e "ssh -p $PORT" ./ $USER@$HOST:$REMOTE_DIR
+
+    # --- 🧰 Run Laravel setup remotely ---
+    - name: Run deployment commands on server
+      env:
+        USER: ${{ secrets.DIGITALOCEAN_USER }}
+        HOST: ${{ secrets.DIGITALOCEAN_HOST }}
+        PORT: ${{ secrets.DIGITALOCEAN_PORT }}
+        REMOTE_DIR: ${{ secrets.DIGITALOCEAN_REMOTE_DIR }}
+      run: |
+        ssh -p $PORT $USER@$HOST << EOF
+          cd $REMOTE_DIR
+
+          # Ensure PHP dependencies are up to date
+          composer install --no-dev --optimize-autoloader
+
+          # Run database migrations
+          php artisan migrate --force
+
+          # Clear and rebuild caches
+          php artisan optimize:clear
+          php artisan optimize
+
+          # Fix permissions
+          sudo chown -R $USER:www-data storage bootstrap/cache
+          chmod -R 775 storage bootstrap/cache
+
+          # Restart queues
+          php artisan queue:restart
+        EOF
