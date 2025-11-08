@@ -82,26 +82,30 @@ jobs:
         PORT: ${{ secrets.DIGITALOCEAN_PORT }}
         REMOTE_DIR: ${{ secrets.DIGITALOCEAN_REMOTE_DIR }}
       run: |
-        ssh -p $PORT $USER@$HOST << 'EOF'
-          set -e
+        ssh -p $PORT $USER@$HOST << EOF
           cd $REMOTE_DIR
 
-          echo "📦 Installing Composer dependencies..."
+          # Ensure dependencies are up to date
           composer install --no-dev --optimize-autoloader
 
-          echo "⚙️ Running migrations..."
-          php artisan migrate --force || true
+          # Run database migrations
+          php artisan migrate --force
 
-          echo "🧹 Clearing and optimizing caches..."
-          php artisan optimize:clear
-          php artisan optimize
+          # Clear and cache Laravel config, routes, and views
+          php artisan config:clear
+          php artisan route:clear
+          php artisan view:clear
+          php artisan cache:clear
+          php artisan config:cache
+          php artisan route:cache
+          php artisan view:cache
 
-          echo "🔐 Setting permissions..."
-          chown -R www-data:www-data storage bootstrap/cache
-          chmod -R 775 storage bootstrap/cache
+          # Set correct permissions for storage and bootstrap cache
+          sudo chown -R $USER:www-data storage
+          sudo chown -R $USER:www-data bootstrap/cache
+          chmod -R 775 storage
+          chmod -R 775 bootstrap/cache
 
-          echo "🚀 Restarting queue workers..."
-          php artisan queue:restart || true
-
-          echo "✅ Deployment completed successfully!"
+          # Restart queue workers if needed
+          php artisan queue:restart
         EOF
